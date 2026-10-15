@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>01 · Набор</title>
+<link rel="stylesheet" href="../../../fonts/fonts.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  /* product: photo 01 scaled s = .58; product box in photo px = 130..1506 × 387..1720 */
+  .p01 { width: 891px; left: 65px; top: 160px; }
+
+  .stats { position: absolute; left: var(--m); right: var(--m); top: 1150px; height: 226px; }
+  .stats .rule { position: absolute; left: 0; right: 0; top: 0; }
+
+  .s-kit  { position: absolute; left: 0; top: 34px; width: 470px; }
+  .s-kit .num { font-size: 150px; }
+  .s-kit .label { margin-top: 26px; }
+
+  .s-lvl, .s-kg { position: absolute; left: 520px; right: 0; }
+  .s-lvl { top: 34px; display: flex; align-items: flex-end; gap: 20px; }
+  .s-lvl .num { font-size: 104px; }
+  .s-kg  { top: 140px; display: flex; align-items: flex-end; gap: 16px; }
+  .s-kg .num { font-size: 72px; }
+  .s-kg .num .unit { font-size: 40px; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <header class="chrome">
+    <span class="chrome__idx"><b>01</b><i>/08</i></span>
+    <span class="chrome__rule"></span>
+    <span class="chrome__tag">Набор</span>
+  </header>
+
+  <h1 class="title title--cover"><span>Спортзал</span><span>у вас дома</span></h1>
+
+  <img class="photo p01" src="../../../src/01_oblozhka.jpg" alt="">
+
+  <section class="stats">
+    <div class="rule"></div>
+    <div class="s-kit">
+      <div class="num"><span class="volt">11 в 1</span></div>
+      <div class="label">Набор эспандеров</div>
+    </div>
+    <div class="s-lvl">
+      <div class="num">5</div>
+      <div class="label">уровней<br>нагрузки</div>
+    </div>
+    <div class="s-kg">
+      <div class="label">Общая<br>нагрузка</div>
+      <div class="num"><span class="unit">до&nbsp;</span><b data-spec="res_total_kg"></b><span class="unit">&nbsp;кг</span></div>
+    </div>
+  </section>
+</div>
+<script src="../../../lib/bind.js"></script>
+</body>
+</html>

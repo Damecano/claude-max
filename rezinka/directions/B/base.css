@@ -1,0 +1,141 @@
+/* =====================================================================
+   ATHLETIX Volt — design system for the 8 Uzum slides (1080 × 1440)
+   White field · black wide display type · ONE accent: volt lime #D2FF3A.
+   Lime is a SURFACE only (highlighter plate behind black text, key-number
+   plate, index plate). It is never a text colour and never a data colour:
+   the five band colours below are the only data palette (load levels).
+   ===================================================================== */
+
+:root {
+  /* canvas + grid ---------------------------------------------------- */
+  --W: 1080px;
+  --H: 1440px;
+  --m: 64px;                 /* outer margin, all four sides (≥ 56) */
+  --col: calc(var(--W) - 2 * var(--m));   /* 952 px live width */
+  --gut: 32px;               /* module gutter */
+  --chrome-top: var(--m);    /* y of the index row */
+  --title-top: 148px;        /* y of the title block on every slide */
+
+  /* colour ------------------------------------------------------------ */
+  --paper: #FFFFFF;
+  --ink:   #0B0B0B;          /* 19.6 : 1 on white */
+  --ink-2: #4A4A4A;          /* secondary text, 8.9 : 1 (AAA) */
+  --hair:  #0B0B0B;          /* rules are ink, not grey */
+  --volt:  #D2FF3A;          /* the single accent — surface only */
+
+  /* data palette: sampled from the bands in photo 03 */
+  --band-yellow: #FED609;
+  --band-green:  #028D63;
+  --band-red:    #F41926;
+  --band-blue:   #0168DF;
+  --band-black:  #121213;
+
+  /* type ---------------------------------------------------------------- */
+  --f-display: 'Unbounded', 'Inter Tight', sans-serif;
+  --f-text:    'Inter Tight', 'Inter', sans-serif;
+  --f-mono:    'JetBrains Mono', monospace;
+
+  --t-cover: 112px;          /* cover headline (≥ 96) */
+  --t-title: 84px;           /* slide titles 02–08 (≥ 80) */
+  --t-fact:  36px;           /* any fact line (≥ 34) */
+  --t-label: 34px;           /* callout labels, smallest fact size */
+  --t-meta:  24px;           /* mono micro-meta (≥ 22) */
+  --track-display: -0.035em;
+
+  /* motion ---------------------------------------------------------------- */
+  --skew: -12deg;            /* the one slant used by every plate */
+}
+
+/* ---------------------------------------------------------------- canvas */
+html, body { margin: 0; width: 1080px; height: 1440px; overflow: hidden; background: var(--paper); }
+* { box-sizing: border-box; }
+body {
+  color: var(--ink);
+  font-family: var(--f-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  font-feature-settings: "kern" 1;
+}
+.slide { position: relative; width: var(--W); height: var(--H); overflow: hidden; background: var(--paper); }
+.abs { position: absolute; }
+
+/* --------------------------------------------------------------- chrome
+   One row at the top of every slide:  [01]/08 ——————————— НАБОР
+   lime index plate · hairline speed-rule · section tag (mono)          */
+.chrome {
+  position: absolute; left: var(--m); right: var(--m); top: var(--chrome-top);
+  height: 40px; display: flex; align-items: center; gap: 22px;
+  font: 600 var(--t-meta)/1 var(--f-mono); letter-spacing: .04em; color: var(--ink);
+}
+.chrome__idx { display: inline-flex; align-items: center; white-space: nowrap; }
+.chrome__idx b { font-weight: 700; padding: 0 12px; margin-right: 6px; }
+.chrome__idx i { font-style: normal; color: var(--ink-2); }
+.chrome__rule { flex: 1; height: 2px; background: var(--hair); }
+.chrome__tag { white-space: nowrap; text-transform: uppercase; letter-spacing: .12em; }
+
+/* ---------------------------------------------------------------- titles */
+.title {
+  position: absolute; left: var(--m); top: var(--title-top); margin: 0;
+  font: 800 var(--t-title)/.98 var(--f-display);
+  letter-spacing: var(--track-display);
+  color: var(--ink);
+}
+.title--cover { font-size: var(--t-cover); font-weight: 900; line-height: .96; }
+.title span { display: block; white-space: nowrap; }
+
+.eyebrow { font: 600 var(--t-fact)/1.15 var(--f-text); letter-spacing: -.005em; color: var(--ink); }
+.fact    { font: 600 var(--t-fact)/1.18 var(--f-text); letter-spacing: -.01em; color: var(--ink); }
+.label   { font: 600 var(--t-label)/1.12 var(--f-text); letter-spacing: -.01em; color: var(--ink); }
+.meta    { font: 600 var(--t-meta)/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+
+/* --------------------------------------------------------------- numbers
+   Big numerals are always display 900; units ride on the baseline,
+   set in the text face so the numeral stays the hero.                  */
+.num {
+  font-family: var(--f-display); font-weight: 900; line-height: .8;
+  letter-spacing: -.045em; white-space: nowrap; color: var(--ink);
+  font-variant-numeric: lining-nums;
+}
+.unit { font-family: var(--f-text); font-weight: 700; letter-spacing: -.01em; }
+.nb { white-space: nowrap; }
+
+/* ------------------------------------------------------------ volt plate
+   The accent. A slanted lime block BEHIND black text. Use on one thing
+   per slide: the key number / key line.                               */
+.volt { position: relative; z-index: 0; display: inline-block; color: var(--ink); }
+.volt::before {
+  content: ""; position: absolute; z-index: -1;
+  left: -.2em; right: -.2em; top: var(--volt-top, .02em); bottom: var(--volt-bot, -.04em);
+  background: var(--volt); transform: skewX(var(--skew));
+}
+/* index plate in the chrome */
+.chrome__idx b { position: relative; z-index: 0; }
+.chrome__idx b::before {
+  content: ""; position: absolute; z-index: -1; inset: -7px 0 -7px 0;
+  background: var(--volt); transform: skewX(var(--skew));
+}
+
+/* ------------------------------------------------------ numbered module
+   Every fact block starts with a mono index and an ink rule.           */
+.mod { position: absolute; }
+.mod__head {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+  font: 600 var(--t-meta)/1 var(--f-mono); letter-spacing: .06em; color: var(--ink-2);
+}
+.mod__head::after { content: ""; flex: 1; height: 2px; background: var(--hair); }
+.rule { height: 3px; background: var(--hair); }
+
+/* ---------------------------------------------------------------- photos
+   White-background shots melt into the page with multiply.            */
+.photo { position: absolute; display: block; mix-blend-mode: multiply; pointer-events: none; user-select: none; }
+.photo--scene { mix-blend-mode: normal; }     /* 04 / 05: hard-edged frames */
+.frame { position: absolute; overflow: hidden; }
+
+/* ------------------------------------------------------- band data marks
+   Square-ended colour bars — never slanted, so they can't be read as volt. */
+.swatch { display: block; height: 10px; background: var(--c); }
+[data-band="yellow"] { --c: var(--band-yellow); }
+[data-band="green"]  { --c: var(--band-green); }
+[data-band="red"]    { --c: var(--band-red); }
+[data-band="blue"]   { --c: var(--band-blue); }
+[data-band="black"]  { --c: var(--band-black); }
