@@ -1,0 +1,18 @@
+{
+  "_izoh": "Raqamlar asl (original) rasmlardan olingan. Nagruzka: '15 to 35 LB' -> 5 ta rezinka 5 lb qadam bilan (15/20/25/30/35 lb) deb hisoblangan, 1 lb = 0,4536 kg. Rang tartibi asl instruksiyadan: sariq (eng yengil) -> yashil -> qizil -> ko'k -> qora (eng og'ir). res_total_kg bo'sh bo'lsa, 5 ta qiymat yig'indisi avtomatik hisoblanadi. null = noma'lum. Kasr vergul bilan.",
+  "items_total": "11",
+  "res_yellow_kg": "6,8",
+  "res_green_kg": "9,1",
+  "res_red_kg": "11,3",
+  "res_blue_kg": "13,6",
+  "res_black_kg": "15,9",
+  "res_total_kg": null,
+  "len_band_cm": "120",
+  "handle_w_cm": "13",
+  "handle_h_cm": "15",
+  "ankle_l_cm": "41",
+  "ankle_w_cm": "5,8",
+  "anchor_l_cm": "23,5",
+  "bag_w_cm": "28",
+  "bag_h_cm": "24,5"
+}
