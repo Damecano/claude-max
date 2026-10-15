@@ -43,3 +43,32 @@ downloading one:
 
 Timing lives in `src/Promo.tsx`; each scene is a component in `src/scenes.tsx`.
 The music is synthesised by `tools/soundtrack.py` and follows the same cut times.
+
+---
+
+# Curiothek reel — vertical 1080×1920
+
+44-second Instagram/Telegram reel for the studio, made from the real Rezinka card set:
+supplier photos (`public/curiothek/before`) vs. the finished Curiothek slides
+(`public/curiothek/after`). Finished render: `out/curiothek-reel.mp4`.
+
+```
+npm run reel                               # soundtrack + out/curiothek-reel.mp4
+COMP=CuriothekReel npm run stills -- 300 600 # check frames
+```
+
+Words on screen: `copy` in `src/reel/copy.ts`. Scenes: `src/reel/scenes.tsx`.
+Timing: `src/reel/Reel.tsx`, mirrored in `tools/reel_soundtrack.py` (music + every sound effect).
+All readable text stays between y=160 and y=1540 (Instagram covers the top and bottom).
+
+| Frames | Shot | Feeling |
+|---|---|---|
+| 0–80 | "Your product is great." on black, orb lit | confidence |
+| 80–235 | Feed full of the same supplier photo; a thumb flicks past, colour drains | frustration |
+| 235–330 | Orb drops in with a bounce — "Let's fix that." — and swallows the feed | hope |
+| 318–413 | CURIOTHEK, the O is the orb | the turn |
+| 410–605 | Design canvas: select the photo, wipe to the finished cover, impact | wow |
+| 605–780 | Shrinks to thumbnail size, then dives into "11 в 1" and "56,7 кг" | trust |
+| 780–945 | Eight slides flash past, then fan out | pride |
+| 945–1120 | Same feed — the Curiothek card stops the scroll, gets tapped | payoff |
+| 1110–1320 | End card: tagline, "Order your card set", link in bio | call to action |

@@ -98,21 +98,27 @@ export const Orb: React.FC<{
 // ---------------------------------------------------------------------------
 // GreenField — the blurred green/aqua atmosphere used behind hero moments.
 
-export const GreenField: React.FC<{intensity?: number; drift?: number; style?: React.CSSProperties}> = ({
+export const GreenField: React.FC<{intensity?: number; drift?: number; w?: number; h?: number; style?: React.CSSProperties}> = ({
   intensity = 1,
   drift = 1,
+  w = 1920,
+  h = 1080,
   style,
 }) => {
   const frame = useCurrentFrame();
   const t = (frame / 30) * drift;
+  // Layout is authored on a 1920×1080 canvas and stretched to the target frame.
+  const sx = w / 1920;
+  const sy = h / 1080;
+  const ss = Math.max(w, h) / 1920;
   const blob = (x: number, y: number, s: number, c: string, a: number) => (
     <div
       style={{
         position: 'absolute',
-        left: x - s / 2,
-        top: y - s / 2,
-        width: s,
-        height: s,
+        left: x * sx - (s * ss) / 2,
+        top: y * sy - (s * ss) / 2,
+        width: s * ss,
+        height: s * ss,
         borderRadius: '50%',
         background: `radial-gradient(closest-side, ${c} 0%, ${c} 35%, transparent 100%)`,
         opacity: a * intensity,

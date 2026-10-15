@@ -6,7 +6,8 @@
     "studio": "remotion studio",
     "audio": "python3 tools/soundtrack.py public/soundtrack.wav",
     "stills": "node tools/stills.mjs out/stills",
-    "render": "npm run audio && remotion render Promo out/promo.mp4"
+    "render": "npm run audio && remotion render Promo out/promo.mp4",
+    "reel": "python3 tools/reel_soundtrack.py public/reel-soundtrack.wav && remotion render CuriothekReel out/curiothek-reel.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.535",
