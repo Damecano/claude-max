@@ -6,25 +6,21 @@
 <link rel="stylesheet" href="../../../fonts/fonts.css">
 <link rel="stylesheet" href="../base.css">
 <style>
-  /* photo 03 full-bleed at exact canvas scale (1536 → 1080, s = .7031):
-     no photo edge can appear; band centres land at x = 216 / 376 / 538 / 697 / 856 */
+  /* photo 03 full-bleed at exact canvas scale (1536 → 1080, s = .7031): no photo edge can
+     appear; band centres land at x = 216 / 376 / 538 / 697 / 858, carabiners end y 1195 */
   .p03 { left: 0; top: 0; width: 1080px; height: 1440px; }
-  /* wall fade — white over the empty wall only (above the rail, below the carabiners) */
-  .fade-top { position: absolute; left: 0; right: 0; top: 0; height: 350px;
-              background: linear-gradient(#fff 0, #fff 62%, rgba(255,255,255,0) 100%); }
-  .fade-bot { position: absolute; left: 0; right: 0; top: 1198px; bottom: 0;
-              background: linear-gradient(rgba(255,255,255,0) 0, #fff 70px); }
+  .veil--top { height: 350px; }          /* rail brackets start at y 356 */
+  .veil--bot { top: 1198px; }
 
-  /* key line: label hangs from the title's first line, plate sits on its last baseline */
+  /* key line: label hangs from the title's first line, plate sits on its last line */
   .key { position: absolute; left: 684px; top: var(--title-top); height: 172px;
          display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; }
-  .key .label { margin-top: 12px; }
-  .key .num { font-size: 50px; line-height: .8; }
+  .key .label { margin-top: 0; }        /* cap line = title cap line */
+  .key .num { font-size: 50px; }
 
+  /* level labels, centred under each band (photo order) */
   .lv { position: absolute; top: 1222px; width: 150px; margin-left: -75px; text-align: center; }
-  .lv .meter { display: flex; gap: 4px; justify-content: center; margin-bottom: 18px; }
-  .lv .meter i { width: 22px; height: 10px; background: rgba(11,11,11,.12); }
-  .lv .meter i.on { background: var(--c); }
+  .lv .meter { justify-content: center; margin-bottom: 18px; }
   .lv .kg { font: 800 42px/1 var(--f-text); letter-spacing: -.02em; white-space: nowrap; }
   .lv .label { margin-top: 10px; }
 </style>
@@ -32,8 +28,8 @@
 <body>
 <div class="slide">
   <img class="photo p03" src="../../../src/03_nagruzka.jpg" alt="">
-  <div class="fade-top"></div>
-  <div class="fade-bot"></div>
+  <div class="veil veil--top"></div>
+  <div class="veil veil--bot"></div>
 
   <header class="chrome">
     <span class="chrome__idx"><b>03</b><i>/08</i></span>
@@ -48,29 +44,29 @@
     <div class="num"><span class="volt">до&nbsp;<b data-spec="res_total_kg"></b>&nbsp;кг</span></div>
   </div>
 
-  <!-- photo order: yellow, red, blue, green, black -->
+  <!-- photo order: yellow, red, blue, green, black · meter = level in the true order -->
   <div class="lv" data-band="yellow" style="left:216px">
-    <div class="meter"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+    <div class="meter" data-level="1"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="kg"><b data-spec="res_yellow_kg"></b>&nbsp;кг</div>
     <div class="label" data-qa="label">очень<br>лёгкая</div>
   </div>
   <div class="lv" data-band="red" style="left:376px">
-    <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+    <div class="meter" data-level="3"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="kg"><b data-spec="res_red_kg"></b>&nbsp;кг</div>
     <div class="label" data-qa="label">средняя</div>
   </div>
   <div class="lv" data-band="blue" style="left:538px">
-    <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+    <div class="meter" data-level="4"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="kg"><b data-spec="res_blue_kg"></b>&nbsp;кг</div>
     <div class="label" data-qa="label">тяжёлая</div>
   </div>
   <div class="lv" data-band="green" style="left:697px">
-    <div class="meter"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+    <div class="meter" data-level="2"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="kg"><b data-spec="res_green_kg"></b>&nbsp;кг</div>
     <div class="label" data-qa="label">лёгкая</div>
   </div>
   <div class="lv" data-band="black" style="left:858px">
-    <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    <div class="meter" data-level="5"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="kg"><b data-spec="res_black_kg"></b>&nbsp;кг</div>
     <div class="label" data-qa="label">очень<br>тяжёлая</div>
   </div>

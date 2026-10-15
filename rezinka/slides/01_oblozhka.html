@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>01 · Обложка</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* product bbox (src x129–1507, y386–1860) → canvas x −30…824, y 392…1306:
+     ring bleeds 30 px off the left edge, carabiners end at x ≈ 822 */
+  .photo { --s: 0.62; --x: calc(-30px - 129px * 0.62); --y: calc(392px - 386px * 0.62); }
+  /* soft hole in the floor-shadow tail so it never runs under the stats
+     (element coords = canvas x + 110, y − 153; centre ≈ canvas 770 / 1322) */
+  .photo {
+    -webkit-mask-image: radial-gradient(175px 64px at 880px 1169px, transparent 0, transparent 55%, #000 100%);
+            mask-image: radial-gradient(175px 64px at 880px 1169px, transparent 0, transparent 55%, #000 100%);
+  }
+
+  /* staggered headline: line 1 flush left, line 2 flush right, led in by a speed-rule */
+  .hero { top: 128px; width: var(--cw); }
+  .hero .l2 { text-align: right; }
+  .lead { position: absolute; left: var(--m); top: 296px; width: 138px; --speed-w: 64px; }
+  /* eyebrow: cap-top of line 1, flush right */
+  .eyebrow { position: absolute; right: var(--m); top: 131px; text-align: right;
+             color: var(--ink); font-weight: 700; font-size: 25px; line-height: 1.3; }
+
+  /* spec stack: bottom-right, in the white beside the handles, under the carabiners */
+  .stack { position: absolute; left: 684px; right: var(--m); bottom: var(--m); }
+  .stack .mod + .mod { margin-top: 14px; }
+  .stack .mod + .mod.tot { margin-top: 26px; }
+  .stack .num--xl { display: block; }
+  .lv { display: flex; align-items: flex-end; gap: 16px; }
+  .sws { display: flex; gap: 8px; margin-top: 14px; }
+  .sws .sw { width: 54px; height: 12px; }
+  .tot .fact { margin-bottom: 12px; }
+</style>
+</head>
+<body>
+  <img class="photo" src="../src/01_oblozhka.jpg" alt="">
+
+  <header class="chrome">
+    <span class="sec"><i class="tick"></i><span class="no">01</span><span>Набор</span></span>
+    <span class="idx">01<i>/08</i></span>
+  </header>
+
+  <h1 class="hero"><span class="l1">Спортзал</span><span class="l2">у вас дома</span></h1>
+  <div class="lead speed" aria-hidden="true"></div>
+  <div class="eyebrow meta">Набор<br>эспандеров</div>
+
+  <div class="stack">
+    <div class="mod mod--key" data-qa="label">
+      <div class="speed"></div><span class="mod-n">01</span>
+      <span class="num num--xl"><b data-spec="items_total"></b><span class="w">в</span>1</span>
+    </div>
+    <div class="mod" data-qa="label">
+      <span class="mod-n">02</span>
+      <div class="lv"><span class="num num--l">5</span><span class="fact">уровней<br>нагрузки</span></div>
+      <div class="sws" aria-hidden="true"><i class="sw y"></i><i class="sw g"></i><i class="sw r"></i><i class="sw bl"></i><i class="sw k"></i></div>
+    </div>
+    <div class="mod tot" data-qa="label">
+      <span class="mod-n">03</span>
+      <div class="fact">Общая нагрузка до</div>
+      <span class="num num--l"><b data-spec="res_total_kg"></b><span class="u">&nbsp;кг</span></span>
+    </div>
+  </div>
+
+  <script src="../lib/bind.js"></script>
+</body>
+</html>

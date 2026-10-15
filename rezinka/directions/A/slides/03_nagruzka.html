@@ -6,32 +6,32 @@
 <link rel="stylesheet" href="../../../fonts/fonts.css">
 <link rel="stylesheet" href="../base.css">
 <style>
-  /* rail centred, end caps inside the margins; bands at x ≈ 233 / 383 / 533 / 681 / 831 */
-  .photo { --s: 0.655; --x: 32px; --y: -75px; }
+  /* 1008 × 1344 image; rail centred with both end caps inside the canvas,
+     bands at x 232 / 382 / 532 / 681 / 832, bottom carabiners end at y ≈ 1049.
+     Fades: right 14 px (stops before the cap at x 1026), bottom 260 px (below the product). */
+  .photo { --s: 0.65625; --x: 31px; --y: -76px; --fade-r: 14px; --fade-b: 260px; }
 
-  .lvl { position: absolute; top: 1086px; width: 140px; margin-left: -70px; text-align: center;
-         display: flex; flex-direction: column; align-items: center; }
-  .lvl .num { font-size: 58px; }
-  .lvl .num .u { font-size: 34px; margin-left: 5px; }
-  .lvl .meter { margin: 20px 0 20px; }
-  .lvl .fact { font-size: 34px; line-height: 1.04; }
-  /* column rules between bands */
-  .cr { position: absolute; top: 1086px; height: 170px; width: 2px; background: var(--hair); }
+  /* one label column under each band */
+  .lvl { position: absolute; top: 1080px; width: 140px; margin-left: -70px;
+         display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .lvl .meter { margin: 20px 0; }
+  .lvl .fact { line-height: 1.06; }
 
-  .key { position: absolute; left: var(--m); right: var(--m); bottom: var(--m); height: 84px;
-         display: flex; align-items: center; }
-  .key .bar { font-size: 46px; font-weight: 600; height: 84px; padding-left: 26px; padding-right: 40px; }
+  .key { position: absolute; left: var(--m); bottom: var(--m); }
+  .key .bar { display: flex; }
 </style>
 </head>
 <body>
   <svg class="defs" aria-hidden="true">
+    <!-- alpha = 1 at luminance ≤ 0.88, 0 at ≥ 0.93 (the wall); colours untouched;
+         region = image box, composited with the source alpha so no edge can turn dark -->
     <filter id="knock" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
-      <!-- alpha = 1 for luminance ≤ 0.88, 0 for ≥ 0.93 (wall), colours untouched -->
-      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -4.252 -14.304 -1.444 0 18.6"/>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -4.252 -14.304 -1.444 0 18.6" result="k"/>
+      <feComposite in="k" in2="SourceAlpha" operator="in"/>
     </filter>
   </svg>
 
-  <img class="photo photo--knock" src="../../../src/03_nagruzka.jpg" alt="">
+  <img class="photo photo--knock photo--fade" src="../../../src/03_nagruzka.jpg" alt="">
 
   <header class="chrome">
     <span class="idx">03<i>/08</i></span>
@@ -42,37 +42,35 @@
 
   <h1 class="title">5 уровней нагрузки</h1>
 
-  <!-- photo order: yellow, red, blue, green, black -->
-  <div class="lvl lv1" style="left:233px" data-qa="label">
-    <span class="num"><b data-spec="res_yellow_kg"></b><span class="u">кг</span></span>
+  <!-- photo order: yellow, red, blue, green, black · meter = level in true order (1 lightest … 5 heaviest) -->
+  <div class="lvl lv1" style="left:232px" data-qa="label">
+    <span class="num num--m"><b data-spec="res_yellow_kg"></b><span class="u">кг</span></span>
     <div class="meter" data-n="1"><b></b><b></b><b></b><b></b><b></b></div>
-    <span class="fact">очень<br>лёгкая</span>
+    <span class="fact fact--s fact--lc">очень<br>лёгкая</span>
   </div>
-  <div class="lvl lv3" style="left:383px" data-qa="label">
-    <span class="num"><b data-spec="res_red_kg"></b><span class="u">кг</span></span>
+  <div class="lvl lv3" style="left:382px" data-qa="label">
+    <span class="num num--m"><b data-spec="res_red_kg"></b><span class="u">кг</span></span>
     <div class="meter" data-n="3"><b></b><b></b><b></b><b></b><b></b></div>
-    <span class="fact">средняя</span>
+    <span class="fact fact--s fact--lc">средняя</span>
   </div>
-  <div class="lvl lv4" style="left:533px" data-qa="label">
-    <span class="num"><b data-spec="res_blue_kg"></b><span class="u">кг</span></span>
+  <div class="lvl lv4" style="left:532px" data-qa="label">
+    <span class="num num--m"><b data-spec="res_blue_kg"></b><span class="u">кг</span></span>
     <div class="meter" data-n="4"><b></b><b></b><b></b><b></b><b></b></div>
-    <span class="fact">тяжёлая</span>
+    <span class="fact fact--s fact--lc">тяжёлая</span>
   </div>
   <div class="lvl lv2" style="left:681px" data-qa="label">
-    <span class="num"><b data-spec="res_green_kg"></b><span class="u">кг</span></span>
+    <span class="num num--m"><b data-spec="res_green_kg"></b><span class="u">кг</span></span>
     <div class="meter" data-n="2"><b></b><b></b><b></b><b></b><b></b></div>
-    <span class="fact">лёгкая</span>
+    <span class="fact fact--s fact--lc">лёгкая</span>
   </div>
-  <div class="lvl lv5" style="left:831px" data-qa="label">
-    <span class="num"><b data-spec="res_black_kg"></b><span class="u">кг</span></span>
+  <div class="lvl lv5" style="left:832px" data-qa="label">
+    <span class="num num--m"><b data-spec="res_black_kg"></b><span class="u">кг</span></span>
     <div class="meter" data-n="5"><b></b><b></b><b></b><b></b><b></b></div>
-    <span class="fact">очень<br>тяжёлая</span>
+    <span class="fact fact--s fact--lc">очень<br>тяжёлая</span>
   </div>
-
-  <i class="cr" style="left:307px"></i><i class="cr" style="left:457px"></i><i class="cr" style="left:606px"></i><i class="cr" style="left:755px"></i>
 
   <div class="key">
-    <span class="bar" data-qa="label"><span>Соединяйте вместе —&nbsp;до&nbsp;<b data-spec="res_total_kg"></b>&nbsp;кг</span></span>
+    <span class="bar bar--lead" data-qa="label">Соединяйте вместе —&nbsp;до&nbsp;<b data-spec="res_total_kg"></b>&nbsp;кг</span>
   </div>
 
   <script src="../../../lib/bind.js"></script>

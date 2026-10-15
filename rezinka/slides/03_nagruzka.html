@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>03 · Нагрузка</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* bar centred on the page; band centres src x 307/535/765/991/1220 → 225/376/528/677/828 */
+  .photo { --s: 0.66; --x: calc(540px - 784px * 0.66); --y: calc(366px - 515px * 0.66); --fade-r: 11px; --fade-b: 70px; }
+
+  /* key module, top right: speed-rule on the title cap-line (147),
+     number baseline on the title baseline (≈312) */
+  .key { position: absolute; right: var(--m); top: 147px; width: 326px; }
+  .key > .speed { --speed-w: 84px; margin-bottom: 14px; }
+  .key .fact { font-size: 34px; font-weight: 800; line-height: 1; }
+  .key .num { display: block; margin-top: 2px; }
+
+  /* labels under each band (photo order) */
+  .lvls { position: absolute; top: 1170px; left: 0; width: 1080px; height: 130px; }
+  .lv { position: absolute; top: 0; width: 142px; margin-left: -71px; text-align: center; }
+  .lv .num { display: block; }
+  .lv .fact { font-size: 34px; margin-top: 10px; line-height: 1.02; letter-spacing: -0.02em; }
+
+  /* legend strip: true order легче → тяжелее */
+  .legend { position: absolute; left: var(--m); right: var(--m); bottom: var(--m);
+            display: flex; align-items: flex-end; gap: 22px; padding-top: 18px; border-top: 2px solid var(--hair); }
+  .legend .meta { color: var(--ink); font-weight: 700; line-height: 1; }
+  .legend .bars { flex: 1; display: flex; align-items: flex-end; gap: 10px; height: 22px; }
+  .legend .bars i { flex: 1; transform: skewX(var(--slant)); }
+  .legend .bars i:nth-child(1) { height: 30%; background: var(--lv-yellow); }
+  .legend .bars i:nth-child(2) { height: 47%; background: var(--lv-green); }
+  .legend .bars i:nth-child(3) { height: 64%; background: var(--lv-red); }
+  .legend .bars i:nth-child(4) { height: 82%; background: var(--lv-blue); }
+  .legend .bars i:nth-child(5) { height: 100%; background: var(--lv-black); }
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="clean" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0" result="luma"/>
+      <feComponentTransfer in="luma" result="mask"><feFuncA type="linear" slope="14.3" intercept="-12.3"/></feComponentTransfer>
+      <feComposite in="mask" in2="SourceGraphic" operator="over"/>
+    </filter>
+  </svg>
+  <img class="photo photo--clean photo--fade" src="../src/03_nagruzka.jpg" alt="">
+
+  <header class="chrome">
+    <span class="sec"><i class="tick"></i><span class="no">03</span><span>Нагрузка</span></span>
+    <span class="idx">03<i>/08</i></span>
+  </header>
+
+  <h1 class="title"><span>5 уровней</span><span>нагрузки</span></h1>
+
+  <div class="key mod mod--key" data-qa="label">
+    <div class="speed"></div>
+    <div class="fact">Соединяйте<br>вместе&nbsp;—</div>
+    <span class="num num--k"><span class="d">до</span><b data-spec="res_total_kg"></b><span class="u">&nbsp;кг</span></span>
+  </div>
+
+  <div class="lvls">
+    <div class="lv" style="left:225px" data-qa="label"><span class="num num--m"><b data-spec="res_yellow_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">очень<br>лёгкая</div></div>
+    <div class="lv" style="left:376px" data-qa="label"><span class="num num--m"><b data-spec="res_red_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">средняя</div></div>
+    <div class="lv" style="left:528px" data-qa="label"><span class="num num--m"><b data-spec="res_blue_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">тяжёлая</div></div>
+    <div class="lv" style="left:677px" data-qa="label"><span class="num num--m"><b data-spec="res_green_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">лёгкая</div></div>
+    <div class="lv" style="left:828px" data-qa="label"><span class="num num--m"><b data-spec="res_black_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">очень<br>тяжёлая</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="meta">легче</span>
+    <div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <span class="meta">тяжелее</span>
+  </div>
+
+  <script src="../lib/bind.js"></script>
+</body>
+</html>

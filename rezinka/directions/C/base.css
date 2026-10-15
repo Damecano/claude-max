@@ -1,0 +1,248 @@
+/* ==========================================================================
+   ATHLETIX Signal — design system for the 8 Uzum slides (1080 × 1440)
+   White + ink + ONE signal accent. Italic heavy grotesque, hairline rules,
+   numbered modules, mono micro-metadata.
+   Orange never carries text (#FF4D12 on white is 3.2 : 1 — fails AAA): it only
+   *marks* — the chrome index tick, the speed-rule that leads into a headline
+   line, and the speed-rule above the one key number of a slide.
+   Every slant (tick, speed-rule, swatches, divider) uses --slant, the italic angle.
+   ========================================================================== */
+
+:root {
+  /* colour */
+  --paper:  #FFFFFF;
+  --ink:    #0E0E10;
+  --mute:   #505056;            /* meta text, 7.9 : 1 on white (AAA) */
+  --hair:   #0E0E10;            /* hairline rules */
+  --hair-2: #D6D6DA;            /* secondary hairline (non-text) */
+  --signal: #FF4D12;            /* the ONE accent — marks only */
+
+  /* data palette: band colours = load levels (sampled from the photos) */
+  --lv-yellow: #F7CC17;
+  --lv-green:  #0D9067;
+  --lv-red:    #E32326;
+  --lv-blue:   #116CD5;
+  --lv-black:  #0E0E10;
+
+  /* type */
+  --f-display: 'Inter Tight', 'Inter', sans-serif;   /* italic 900 */
+  --f-text:    'Inter Tight', 'Inter', sans-serif;   /* roman 500–700 */
+  --f-mono:    'JetBrains Mono', monospace;
+
+  /* scale (px) — headline : meta ≥ 4 : 1 */
+  --t-hero:   132px;    /* cover headline (2 lines, staggered)        */
+  --t-title:  104px;    /* slide title 02–08 (1–2 lines, top-left)     */
+  --t-num-xl: 150px;    /* the biggest numeral of the set («11 в 1»)   */
+  --t-num-l:  104px;    /* stat numerals (cover stack, step numbers)   */
+  --t-num-k:   88px;    /* key number next to an inner-slide title     */
+  --t-num-m:   56px;    /* inline values (kg under bands, sizes)       */
+  --t-fact:    36px;    /* fact text (≥ 34; 34 only in tight columns)  */
+  --t-meta:    23px;    /* mono meta (≥ 22)                            */
+
+  --track-display: -0.045em;
+  --track-num:     -0.06em;
+  --track-mono:     0.08em;
+
+  /* grid */
+  --m: 64px;                        /* outer margin (≥ 56) */
+  --W: 1080px; --H: 1440px;
+  --cw: calc(var(--W) - 2 * var(--m));   /* content width 952 */
+  --chrome-y: 52px;                 /* chrome baseline box top */
+  --rule-y: 100px;                  /* chrome hairline */
+  --title-y: 140px;                 /* title top (all slides) */
+  --slant: -12deg;                  /* skew of every speed / divider = italic angle */
+}
+
+/* ---------- page ---------- */
+html, body { margin: 0; width: 1080px; height: 1440px; overflow: hidden; }
+body {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-text);
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+  font-kerning: normal;
+  font-feature-settings: "kern" 1;
+}
+* { box-sizing: border-box; }
+b { font-weight: inherit; }
+
+/* ---------- photo ---------- */
+/* place with --s (scale of the 1536×2048 source), --x / --y (top-left, px) */
+.photo {
+  position: absolute;
+  left: var(--x, 0px); top: var(--y, 0px);
+  width: calc(1536px * var(--s, 0.703125));
+  height: auto;
+  mix-blend-mode: multiply;          /* near-white melts into the page */
+  pointer-events: none;
+  user-select: none;
+}
+/* wall clean-up for photos with a grey wall gradient (03): pixels with luma
+   > .86 are pushed to white (smooth ramp .86→.93); saturated band colours
+   (luma < .86) are untouched. Needs the inline <svg> filter #clean in the page. */
+.photo--clean { filter: url(#clean); }
+/* soft edge fade (canvas px) where a cast shadow would be cut by the photo border */
+.photo--fade {
+  -webkit-mask-image: linear-gradient(to left, transparent, #000 var(--fade-r, 0px)),
+                      linear-gradient(to top,  transparent, #000 var(--fade-b, 0px));
+  -webkit-mask-composite: source-in;
+          mask-image: linear-gradient(to left, transparent, #000 var(--fade-r, 0px)),
+                      linear-gradient(to top,  transparent, #000 var(--fade-b, 0px));
+          mask-composite: intersect;
+}
+/* full scenes (04, 05) — hard-edged frame, no blending */
+.frame { position: absolute; overflow: hidden; background: var(--ink); }
+.frame > img { position: absolute; mix-blend-mode: normal; }
+
+/* ---------- chrome (identical on all 8 slides) ---------- */
+.chrome {
+  position: absolute;
+  left: var(--m); right: var(--m); top: var(--chrome-y);
+  height: 30px;
+  display: flex; align-items: center; justify-content: space-between;
+  font: 500 var(--t-meta)/1 var(--f-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.chrome::after {                      /* the hairline */
+  content: ""; position: absolute; left: 0; right: 0;
+  top: calc(var(--rule-y) - var(--chrome-y)); height: 2px; background: var(--hair);
+}
+.chrome .sec { display: flex; align-items: center; gap: 16px; }
+.chrome .sec .no { font-weight: 700; }
+.chrome .idx { font-weight: 700; }
+.chrome .idx i { font-style: normal; font-weight: 500; color: var(--mute); }
+
+/* signal tick — small slanted orange block, the index mark */
+.tick {
+  display: inline-block; width: 12px; height: 26px;
+  background: var(--signal);
+  transform: skewX(var(--slant));
+  flex: none;
+}
+
+/* ---------- display type ---------- */
+.hero, .title {
+  position: absolute; left: var(--m); margin: 0;
+  font-family: var(--f-display); font-style: italic; font-weight: 900;
+  letter-spacing: var(--track-display);
+  word-spacing: 0.1em;               /* tight tracking must not glue words */
+  text-transform: uppercase;
+  line-height: 0.86;
+  color: var(--ink);
+}
+.hero  { font-size: var(--t-hero); top: var(--title-y); }
+.title { font-size: var(--t-title); top: var(--title-y); }
+.hero span, .title span { display: block; white-space: nowrap; }
+
+/* ---------- numerals ---------- */
+.num {
+  font-family: var(--f-display); font-style: italic; font-weight: 900;
+  letter-spacing: var(--track-num);
+  line-height: 0.8;
+  font-variant-numeric: lining-nums;
+  white-space: nowrap;
+}
+.num--xl { font-size: var(--t-num-xl); }
+.num--l  { font-size: var(--t-num-l); }
+.num--k  { font-size: var(--t-num-k); }
+.num--m  { font-size: var(--t-num-m); }
+.num .u  { font-size: 0.42em; letter-spacing: -0.02em; margin-left: 0.06em; }  /* кг, см */
+.num .d  { font-size: 0.42em; letter-spacing: -0.02em; margin-right: 0.36em; } /* «до» before a value */
+.num .w  { font-size: 0.62em; letter-spacing: -0.03em; margin: 0 0.15em 0 0.21em; } /* «в» in «11 в 1» */
+
+/* ---------- text ---------- */
+.fact {                                   /* any fact text ≥ 34 px */
+  font: 600 var(--t-fact)/1.08 var(--f-text);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.fact--b { font-weight: 800; }
+.meta, .tag {                             /* mono micro-metadata ≥ 22 px */
+  font: 500 var(--t-meta)/1.15 var(--f-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.tag--ink { color: var(--ink); font-weight: 700; }
+
+/* ---------- rules ---------- */
+.rule  { height: 2px; background: var(--hair); }
+.rule--soft { height: 2px; background: var(--hair-2); }
+/* speed-rule: orange slanted bar + ink hairline running out of it */
+.speed { display: flex; align-items: center; height: 14px; }
+.speed::before {
+  content: ""; flex: none; width: var(--speed-w, 96px); height: 14px;
+  background: var(--signal); transform: skewX(var(--slant));
+}
+.speed::after { content: ""; flex: 1; height: 2px; background: var(--hair); margin-left: -2px; }
+.speed--solo::after { display: none; }
+/* slanted vertical divider (matches the italic angle) */
+.vdiv { width: 2px; background: var(--hair); transform: skewX(var(--slant)); }
+
+/* ---------- numbered module ---------- */
+/* hairline on top, mono number at the right end of the rule: «———— 02».
+   The key module swaps its hairline for a .speed (add .mod--key). */
+.mod { position: relative; padding-top: 18px; border-top: 2px solid var(--hair); }
+.mod--key { border-top: 0; padding-top: 0; }
+.mod--key > .speed { margin-bottom: 16px; }
+.mod--key > .mod-n { top: -5px; }
+.mod-n {
+  position: absolute; right: 0; top: -13px;
+  padding-left: 12px; background: var(--paper);
+  font: 700 var(--t-meta)/1 var(--f-mono); letter-spacing: var(--track-mono);
+  color: var(--ink);
+}
+.mod-n i { font-style: normal; font-weight: 500; color: var(--mute); }
+
+/* ---------- level swatches (data palette) ---------- */
+.sw { display: inline-block; width: 44px; height: 14px; transform: skewX(var(--slant)); }
+.sw.y  { background: var(--lv-yellow); }
+.sw.g  { background: var(--lv-green); }
+.sw.r  { background: var(--lv-red); }
+.sw.bl { background: var(--lv-blue); }
+.sw.k  { background: var(--lv-black); }
+
+/* ---------- components for the remaining slides (02, 04–08) ---------- */
+/* photo marker (02 kit numbers): ink parallelogram, white italic numeral (AAA) */
+.marker {
+  position: absolute; width: 58px; height: 58px; margin: -29px 0 0 -29px;
+  display: grid; place-items: center;
+  background: var(--ink); color: var(--paper); transform: skewX(var(--slant));
+  font: italic 900 34px/1 var(--f-display); letter-spacing: -0.04em;
+}
+.marker > span { transform: skewX(calc(-1 * var(--slant))); }
+/* tag / chip (05 muscle groups, 07 places): hard-edged, no radius */
+.chip {
+  display: inline-flex; align-items: center; height: 68px; padding: 0 26px;
+  border: 2px solid var(--ink); background: var(--paper);
+  font: italic 900 38px/1 var(--f-display); letter-spacing: -0.03em; text-transform: uppercase;
+}
+.chip--ink { background: var(--ink); color: var(--paper); }
+/* text block over a full scene (04, 05): solid paper or ink, never on the photo */
+.panel { position: absolute; background: var(--paper); padding: 28px 32px; }
+.panel--ink { background: var(--ink); color: var(--paper); }
+.panel--ink .fact { color: var(--paper); }
+/* dimension line (08): hairline with end ticks; label = .num--m + .u */
+.dim { position: absolute; height: 2px; background: var(--ink); }
+.dim::before, .dim::after { content: ""; position: absolute; top: -11px; width: 2px; height: 24px; background: var(--ink); }
+.dim::before { left: 0; } .dim::after { right: 0; }
+.dim--v { width: 2px; height: auto; }
+.dim--v::before, .dim--v::after { top: auto; left: -11px; width: 24px; height: 2px; }
+.dim--v::before { top: 0; } .dim--v::after { bottom: 0; right: auto; }
+
+/* SVG filter used by .photo--clean — paste once per page that needs it:
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="clean" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceGraphic" type="matrix"
+      values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0" result="luma"/>
+    <feComponentTransfer in="luma" result="mask"><feFuncA type="linear" slope="14.3" intercept="-12.3"/></feComponentTransfer>
+    <feComposite in="mask" in2="SourceGraphic" operator="over"/>
+  </filter>
+</svg> */
+
+/* placeholder from bind.js */
+.ph { color: var(--signal); }

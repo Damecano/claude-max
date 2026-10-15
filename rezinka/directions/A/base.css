@@ -1,54 +1,64 @@
 /* ==========================================================================
    ATHLETIX Mono — direction A · design system for the 8 Uzum slides
+   --------------------------------------------------------------------------
    White paper, black ink. The five band colours are the ONLY colour and only
-   ever mean a load level. One motif: the speed cut (a fixed -15° slant) used
-   on label bars, level chips and the index tag. Everything else is upright.
+   ever mean a load level. One motif: the speed cut — a fixed 15° slant used on
+   the right edge of black bars/tags and on level chips/ticks. Everything else
+   is upright and on the grid.
 
-   Fonts: Oswald 500–700 (display, numerals, facts) · JetBrains Mono (meta).
-   Canvas 1080 × 1440 · margins 64 · chrome row at y 56 · title cap-top at y 136.
+   Fonts   Oswald 500–700 (display, numerals, facts) · JetBrains Mono (meta)
+   Canvas  1080 × 1440 · margins 64 · content 952
+   Chrome  meta row top y 56 · title cap-top y 136 · bottom line y 1376
+   Grid    info column = right 30 % of the content (x 730 → 1016)
    ========================================================================== */
 
 :root {
   /* canvas + grid */
   --W: 1080px;
   --H: 1440px;
-  --m: 64px;                 /* side + bottom margin (brief: ≥ 56) */
-  --chrome-y: 56px;          /* top of the meta row (index · tag · product line) */
-  --title-y: 136px;          /* cap-top of every slide title / cover headline */
-  --col: calc(var(--W) - 2 * var(--m));   /* 952 content width */
+  --m: 64px;                                  /* side + bottom margin (brief ≥ 56) */
+  --col: calc(var(--W) - 2 * var(--m));       /* 952 content width */
+  --info-x: calc(var(--m) + var(--col) * 0.7);/* 730: left edge of the info column */
+  --info-w: calc(var(--col) * 0.3);           /* 286 */
+  --gut: 24px;
+  --chrome-y: 56px;                           /* top of the meta row */
+  --title-y: 136px;                           /* cap-top of every title / headline */
+  --foot-y: calc(var(--H) - var(--m));        /* 1376: lowest ink line */
 
   /* ink */
   --paper: #fff;
   --ink: #000;
-  --ink-2: #2b2b2b;          /* secondary text, 14.4:1 on white (AAA) */
-  --hair: #000;              /* rules are black, never grey */
-  --rule: 3px;               /* heavy rule */
+  --ink-2: #2b2b2b;                           /* secondary text, 14.4 : 1 (AAA) */
+  --hair: #000;                               /* rules are black, never grey */
+  --rule: 3px;
   --rule-thin: 2px;
-  --void: #e9e9e9;           /* empty meter ticks only (never text) */
+  --void: #e6e6e6;                            /* empty meter ticks only, never text */
 
   /* data palette — load levels, light → heavy (supplier order) */
-  --lv-1: #ffd200;           /* жёлтый  · очень лёгкая */
-  --lv-2: #00a06a;           /* зелёный · лёгкая */
-  --lv-3: #ee1b24;           /* красный · средняя */
-  --lv-4: #0a6bdb;           /* синий   · тяжёлая */
-  --lv-5: #111;              /* чёрный  · очень тяжёлая */
+  --lv-1: #ffd200;                            /* жёлтый  · очень лёгкая */
+  --lv-2: #00a06a;                            /* зелёный · лёгкая */
+  --lv-3: #ee1b24;                            /* красный · средняя */
+  --lv-4: #0a6bdb;                            /* синий   · тяжёлая */
+  --lv-5: #111;                               /* чёрный  · очень тяжёлая */
 
-  /* the one motif */
+  /* the one motif: 15° (tan = 0.268) */
   --slant: -15deg;
+  --tan: 0.268;
 
   /* type families */
   --f-display: 'Oswald', 'Inter Tight', sans-serif;
   --f-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* type scale (px) — headline : meta ≥ 4 : 1 */
-  --t-hero: 144px;           /* cover headline */
-  --t-title: 100px;          /* slide titles 02–08 (one line fits 952 px up to ~18 caps) */
-  --t-num-xl: 136px;         /* hero numerals («11 в 1») */
-  --t-num-l: 96px;           /* key numerals (totals) */
-  --t-num-m: 64px;           /* per-item numerals (kg under bands, cm) */
-  --t-lead: 44px;            /* key line in a bar */
-  --t-fact: 36px;            /* any fact text (brief: ≥ 34) */
-  --t-meta: 24px;            /* mono micro-meta (brief: ≥ 22) */
+  /* type scale — headline : meta ≥ 4 : 1 */
+  --t-hero: 144px;       /* cover headline (2 lines) */
+  --t-title: 100px;      /* titles 02–08; one line holds ~18 caps in 952 px */
+  --t-num-xl: 132px;     /* hero numerals («11 в 1») */
+  --t-num-l: 88px;       /* key numerals («5», totals) */
+  --t-num-m: 58px;       /* per-item numerals (kg under bands, cm) */
+  --t-lead: 48px;        /* key line in a black bar */
+  --t-fact: 36px;        /* fact text (brief ≥ 34) */
+  --t-fact-s: 34px;      /* tight columns only */
+  --t-meta: 24px;        /* mono micro-meta (brief ≥ 22) */
 }
 
 /* ---------- canvas ---------- */
@@ -66,9 +76,10 @@ body {
 .abs { position: absolute; }
 
 /* ---------- photo layer ----------
-   White-background photos melt into the page with multiply.
-   Position with --x/--y (top-left of the image in canvas px) and --s (scale of
-   the 1536 × 2048 source). */
+   White-background photos melt into the page with multiply. Place with --x / --y
+   (image top-left in canvas px) and --s (scale of the 1536 × 2048 source; use
+   multiples of 1/32 for integer pixel sizes). Full scenes (04, 05) use .photo--scene
+   inside a hard-edged .frame instead. */
 .photo {
   position: absolute;
   left: var(--x, 0px);
@@ -79,14 +90,22 @@ body {
   pointer-events: none;
   user-select: none;
 }
-/* For photos with a grey wall gradient (03): near-white pixels (L > ~0.88)
-   fade to transparent, so no photo edge can show. Product pixels are darker
-   than the threshold and stay untouched. Needs the inline <svg> filter #knock
-   (see slides/03_nagruzka.html — copy the <svg class="defs"> block). */
+/* Grey-wall photos (03): pixels lighter than L ≈ 0.88 fade to transparent so the
+   wall never shows as a tone or an edge; product pixels are darker and untouched.
+   Needs the inline <svg class="defs"> #knock filter (copy it from 03_nagruzka.html). */
 .photo--knock { filter: url(#knock); }
+/* Soft edges where an image ends inside the canvas: widths faded on right / bottom. */
+.photo--fade {
+  mask-image:
+    linear-gradient(to left, transparent 0, #000 var(--fade-r, 1px)),
+    linear-gradient(to top, transparent 0, #000 var(--fade-b, 1px));
+  mask-composite: intersect;
+}
+.frame { position: absolute; overflow: hidden; }          /* hard-edged crop for scenes */
+.frame > img { position: absolute; display: block; }
 svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-/* ---------- chrome: index tag · section tag · speed rule · product line ---------- */
+/* ---------- chrome: [NN/08] TAG ───────── product line ---------- */
 .chrome {
   position: absolute;
   top: var(--chrome-y);
@@ -104,37 +123,28 @@ svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
   line-height: 1;
   white-space: nowrap;
 }
-.chrome .idx {                         /* «01/08» in a black slanted tag */
-  position: relative;
+.chrome .idx {                                   /* black tag, speed-cut right edge */
   color: var(--paper);
-  padding: 0 14px 0 12px;
+  background: var(--ink);
+  padding: 0 22px 0 12px;
   height: 36px;
   display: inline-flex;
   align-items: center;
-  isolation: isolate;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);   /* 10 = 36 × tan 15° */
 }
-.chrome .idx::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
-  transform: skewX(var(--slant));
-  transform-origin: 0 100%;
-  z-index: -1;
-}
-.chrome .idx i { font-style: normal; font-weight: 500; opacity: 1; }
-.chrome .tag { font-weight: 700; }
+.chrome .idx i { font-style: normal; font-weight: 500; }
+.chrome .tag  { font-weight: 700; }
 .chrome .rule { flex: 1; height: var(--rule-thin); background: var(--hair); }
 .chrome .line { font-weight: 500; }
 
 /* ---------- titles ----------
-   Cap-top sits exactly on --title-y (text-box trim), so every slide title
-   starts at the same height regardless of size. */
+   Cap-top sits exactly on --title-y (text-box trim) on every slide; the small
+   negative indent puts the first glyph's ink on the 64 px margin. */
 .title, .hero {
   position: absolute;
   top: var(--title-y);
   left: var(--m);
-  margin: 0;
+  margin: 0 0 0 -0.04em;
   font-family: var(--f-display);
   font-weight: 700;
   text-transform: uppercase;
@@ -146,6 +156,15 @@ svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 .title { font-size: var(--t-title); }
 .hero  { font-size: var(--t-hero); line-height: 0.92; }
 .title span, .hero span { display: block; }
+.sub {                                           /* optional sub-line under a 1-line title */
+  position: absolute;
+  top: calc(var(--title-y) + var(--t-title) * 0.81 + 34px);
+  left: var(--m);
+  font-size: var(--t-fact);
+  font-weight: 500;
+  line-height: 1.1;
+  text-box: trim-both cap alphabetic;
+}
 
 /* ---------- numerals ---------- */
 .num {
@@ -156,11 +175,11 @@ svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
   text-box: trim-both cap alphabetic;
   white-space: nowrap;
 }
-.num .u {                               /* unit after a numeral: «кг», «см» */
+.num .u {                                        /* unit: «кг», «см» — never below 34 px */
   font-weight: 500;
-  font-size: 0.42em;
+  font-size: max(0.42em, var(--t-fact-s));
   letter-spacing: 0.01em;
-  margin-left: 0.12em;
+  margin-left: 0.18em;
 }
 .num--xl { font-size: var(--t-num-xl); }
 .num--l  { font-size: var(--t-num-l); }
@@ -175,6 +194,8 @@ svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
   text-transform: uppercase;
   letter-spacing: 0.01em;
 }
+.fact--s { font-size: var(--t-fact-s); }
+.fact--lc { text-transform: none; letter-spacing: 0; }   /* descriptors under numerals */
 .meta {
   font-family: var(--f-mono);
   font-size: var(--t-meta);
@@ -184,14 +205,16 @@ svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
   text-transform: uppercase;
 }
 
-/* ---------- label bar: solid black, white text, speed-cut right edge ---------- */
+/* ---------- black bar / tile: white text, speed-cut right edge ----------
+   Left edge vertical (sits on the grid), right edge cut at 15°.
+   Bars are one line (height 1.7em → cut 0.455em); tiles stack lines (--cut px). */
 .bar {
-  position: relative;
   display: inline-flex;
   align-items: center;
   height: 1.7em;
-  padding: 0 0.62em 0 0.42em;
+  padding: 0 0.95em 0 0.42em;
   color: var(--paper);
+  background: var(--ink);
   font-family: var(--f-display);
   font-weight: 600;
   font-size: var(--t-fact);
@@ -199,24 +222,76 @@ svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
   text-transform: uppercase;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  isolation: isolate;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.455em) 100%, 0 100%);
 }
-.bar::before {
-  content: '';
-  position: absolute;
-  inset: 0;
+.bar--lead  { font-size: var(--t-lead); font-weight: 700; }
+.bar--block { display: flex; width: 100%; }
+.tile {
+  --cut: 34px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--paper);
   background: var(--ink);
-  transform: skewX(var(--slant));
-  transform-origin: 0 100%;           /* left-bottom fixed → slant leans right */
-  z-index: -1;
+  padding: 22px calc(var(--cut) + 22px) 22px 20px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
 }
-.bar--lead { font-size: var(--t-lead); }
+.tile .meta { color: var(--paper); }
+
+/* ---------- markers: numbered tags on photos (02 kit, 04 steps) ---------- */
+.mk {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  height: 56px;
+  padding: 0 18px 0 12px;
+  color: var(--paper);
+  background: var(--ink);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 100%, 0 100%);   /* 15 = 56 × tan 15° */
+}
+.mk--ghost { color: var(--ink); background: var(--paper); box-shadow: inset 0 0 0 3px var(--ink); clip-path: none; }
+
+/* ---------- numbered list rows (legend 02, steps 04, places 07, sizes 08) ---------- */
+.rows { display: flex; flex-direction: column; }
+.row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: baseline;
+  gap: var(--gut);
+  padding: 22px 0 20px;
+  border-top: var(--rule-thin) solid var(--hair);
+}
+.row:last-child { border-bottom: var(--rule-thin) solid var(--hair); }
+.row .meta { align-self: center; }
+
+/* ---------- leaders + dimension lines (06 callouts, 08 sizes) ---------- */
+.leader { position: absolute; height: var(--rule-thin); background: var(--ink); transform-origin: 0 50%; }
+.leader::after {                                   /* end dot on the product */
+  content: ''; position: absolute; right: -6px; top: -5px;
+  width: 12px; height: 12px; border-radius: 50%; background: var(--ink);
+}
+.dim { position: absolute; height: var(--rule-thin); background: var(--ink); }
+.dim::before, .dim::after {                        /* end ticks */
+  content: ''; position: absolute; top: -11px; width: var(--rule-thin); height: 24px; background: var(--ink);
+}
+.dim::before { left: 0; }
+.dim::after  { right: 0; }
+.dim--v { width: var(--rule-thin); height: auto; }
+.dim--v::before, .dim--v::after { top: auto; left: -11px; width: 24px; height: var(--rule-thin); }
+.dim--v::before { top: 0; }
+.dim--v::after  { bottom: 0; }
 
 /* ---------- level chips + meters (the data palette) ---------- */
 .chips { display: flex; gap: 8px; }
 .chip {
   width: 44px;
-  height: 28px;
+  height: 22px;
   background: var(--c, var(--ink));
   transform: skewX(var(--slant));
   transform-origin: 0 100%;
@@ -227,7 +302,7 @@ svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 .lv4 { --c: var(--lv-4); }
 .lv5 { --c: var(--lv-5); }
 
-/* 5-tick meter: first --n ticks take the level colour */
+/* 5-tick meter: the first data-n ticks take the level colour */
 .meter { display: flex; gap: 5px; }
 .meter b {
   display: block;

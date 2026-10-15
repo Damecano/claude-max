@@ -7,40 +7,26 @@
 <link rel="stylesheet" href="../base.css">
 <style>
   /* photo 01 at s = .575 · product box (photo px) 130..1506 × 387..1814, floor shadow 1834..1960
-     → canvas: ring left on the margin (x 64), ring top y 402, grips end y 1222 (32 px above the band) */
+     → canvas: ring left on the margin (x 64), ring top y 396, grips end y 1216 (32 px above the band) */
   .p01 {
-    width: 883px; left: -11px; top: 180px;
-    /* fade the photo border (right edge is 30 px past the carabiners) and drop the floor shadow:
-       the volt band below is the floor */
-    -webkit-mask-image: linear-gradient(to right, #000 97.6%, transparent 99.6%),
-                        linear-gradient(to bottom, transparent 4%, #000 9%, #000 88.9%, transparent 89.6%);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to right, #000 97.6%, transparent 99.6%),
-                linear-gradient(to bottom, transparent 4%, #000 9%, #000 88.9%, transparent 89.6%);
-    mask-composite: intersect;
+    width: 883px; left: -11px; top: 174px;
+    /* right edge is only 30 photo-px past the carabiners; the floor shadow is dropped —
+       the volt band is the floor */
+    --mx: linear-gradient(to right, #000 97.6%, transparent 99.6%);
+    --my: linear-gradient(to bottom, transparent 4%, #000 9%, #000 88.9%, transparent 90.2%);
   }
 
-  /* bottom row: volt band bleeding off the left edge — the key-number plate */
-  .band {
-    position: absolute; left: 0; bottom: var(--m); height: 122px; width: 680px;
-    display: flex; align-items: center; gap: 30px; padding-left: var(--m);
-  }
-  .band::before {
-    content: ""; position: absolute; z-index: -1; left: -40px; right: 0; top: 0; bottom: 0;
-    background: var(--volt); transform: skewX(var(--skew)); transform-origin: 0 100%;
-  }
-  .band { z-index: 0; }
-  .band .num { font-size: 124px; line-height: .8; transform: translateY(2px); }
+  /* one grid line: band top = second rule of the column (y 1248) */
+  .band { bottom: var(--m); height: 128px; width: 664px; }   /* slanted top-right corner stops 33 px short of the column */
+  .band .num { font-size: 124px; transform: translateY(2px); }
   .band .label { line-height: 1.08; }
 
-  /* right column: two facts on the same grid line as the band */
   .col { position: absolute; left: 724px; right: var(--m); bottom: var(--m); }
-  .col .fact-blk { border-top: 3px solid var(--ink); padding-top: 20px; }
-  .col .fact-blk + .fact-blk { margin-top: 38px; }
   .lvl { display: flex; align-items: flex-end; gap: 18px; }
   .lvl .num { font-size: 120px; }
   .lvl .label { transform: translateY(6px); }
-  .kg .label { margin-bottom: 12px; }
+  .kg { height: 128px; padding-top: 16px; }
+  .kg .label { margin-bottom: 10px; }
   .kg .num { font-size: 72px; display: flex; align-items: baseline; gap: 10px; }
   .kg .num .unit { font-size: 36px; }
 </style>
@@ -55,9 +41,9 @@
 
   <h1 class="title title--cover"><span>Спортзал</span><span>у вас дома</span></h1>
 
-  <img class="photo p01" src="../../../src/01_oblozhka.jpg" alt="">
+  <img class="photo photo--soft p01" src="../../../src/01_oblozhka.jpg" alt="">
 
-  <div class="band">
+  <div class="volt-band band">
     <div class="num">11 в 1</div>
     <div class="label">Набор<br>эспандеров</div>
   </div>
