@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>08 · Размеры</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* Photo 08 is re-composed from soft-edged crops of the same frame so every item gets room
+     for its dimension lines: bands at s = 0.668 (tip-to-tip = the 952 grid), accessories at 0.72.
+     Each crop = the full photo masked to a rectangle (--cl/--cr/--ct/--cb in element px = src px · s);
+     canvas = (--x + s·sx, --y + s·sy). The clean filter takes the paper to pure white. */
+  .crop {
+    --f: 10px;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent var(--cl), #000 calc(var(--cl) + var(--f)), #000 calc(var(--cr) - var(--f)), transparent var(--cr)),
+      linear-gradient(to bottom, transparent var(--ct), #000 calc(var(--ct) + var(--f)), #000 calc(var(--cb) - var(--f)), transparent var(--cb));
+    -webkit-mask-composite: source-in;
+            mask-image:
+      linear-gradient(to right, transparent var(--cl), #000 calc(var(--cl) + var(--f)), #000 calc(var(--cr) - var(--f)), transparent var(--cr)),
+      linear-gradient(to bottom, transparent var(--ct), #000 calc(var(--ct) + var(--f)), #000 calc(var(--cb) - var(--f)), transparent var(--cb));
+            mask-composite: intersect;
+  }
+  /* bands: carabiner tips src x55…1478 → canvas 64…1015, yellow top (src y687) at 344 */
+  .c-bands  { --s: 0.668; --x: 27.8px;  --y: -114.9px; --cl: 0px;   --cr: 1026px; --ct: 434px;  --cb: 812px; }
+  /* handle (left one): src x39–405, y1265–1679 → canvas 64…328, 744…1042 */
+  .c-handle { --s: 0.72;  --x: 35.9px;  --y: -166.8px; --cl: 0px;   --cr: 303px;  --ct: 889px;  --cb: 1267px; --f: 8px; }
+  /* ankle strap: src x854–1484, y1269–1430 → canvas 542…996, 744…860 (webbing 748…846) */
+  .c-ankle  { --s: 0.72;  --x: -72.9px; --y: -169.7px; --cl: 606px; --cr: 1106px; --ct: 896px;  --cb: 1062px; }
+  /* door anchor: src x819–1477, y1513–1707 → canvas 542…1016, 1122…1262 */
+  .c-anchor { --s: 0.72;  --x: -47.7px; --y: 32.6px;   --cl: 572px; --cr: 1106px; --ct: 1066px; --cb: 1256px; }
+  /* bag inset from photo 02 (the bag is not in photo 08), small: src x642–1102, y1397–1870 → 64…202, 1234…1376 */
+  .c-bag    { --s: 0.3;   --x: -128.6px; --y: 815px;   --cl: 188px; --cr: 335px;  --ct: 416px;  --cb: 574px; --f: 6px; }
+
+  /* set-wide rules kept local (base.css is frozen): units ≥ 34 px on inline values,
+     set off from the numeral; one × spacing for every «a × b» value */
+  .num .u { font-size: 0.5em; }
+  .num--m .u { font-size: 0.6em; margin-left: 0.12em; }
+  .num .x { font-size: 0.62em; letter-spacing: 0; margin: 0 0.2em 0 0.24em; position: relative; top: -0.08em; }
+
+  /* key module: band length (the one key number), top right (x 680 = the set's key column) */
+  .key { position: absolute; right: var(--m); top: 147px; width: 336px; }
+  .key > .speed { --speed-w: 84px; margin-bottom: 14px; }
+  .key .fact { font-size: 34px; font-weight: 800; line-height: 1; }
+  .key .num { display: block; margin-top: 8px; }
+
+  /* dimension labels: name (34 px / 800, same voice as the key label «Эспандер») + value */
+  .lbl { position: absolute; }
+  .lbl .tag { display: block; margin-bottom: 8px;
+              font: 800 34px/1 var(--f-text); letter-spacing: -0.015em; text-transform: none; color: var(--ink); }
+  .lbl .num { display: block; }
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="clean" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0" result="luma"/>
+      <feComponentTransfer in="luma" result="mask"><feFuncA type="linear" slope="14.3" intercept="-12.3"/></feComponentTransfer>
+      <feComposite in="mask" in2="SourceGraphic" operator="over"/>
+    </filter>
+  </svg>
+  <img class="photo photo--clean crop c-bands"  src="../src/08_razmery.jpg" alt="">
+  <img class="photo photo--clean crop c-handle" src="../src/08_razmery.jpg" alt="">
+  <img class="photo photo--clean crop c-ankle"  src="../src/08_razmery.jpg" alt="">
+  <img class="photo photo--clean crop c-anchor" src="../src/08_razmery.jpg" alt="">
+  <img class="photo photo--clean crop c-bag"    src="../src/02_komplekt.jpg" alt="">
+
+  <header class="chrome">
+    <span class="sec"><i class="tick"></i><span class="no">08</span><span>Размеры</span></span>
+    <span class="idx">08<i>/08</i></span>
+  </header>
+
+  <h1 class="title"><span>Размеры</span></h1>
+
+  <div class="key mod mod--key" data-qa="label">
+    <div class="speed"></div>
+    <div class="fact">Эспандер</div>
+    <span class="num num--k"><b data-spec="len_band_cm"></b><span class="u">&nbsp;см</span></span>
+  </div>
+
+  <!-- 1 band length, across the top band -->
+  <div class="dim" style="left:64px;top:318px;width:952px"></div>
+
+  <!-- 2 handle w × h: width over the grip, height on the right -->
+  <div class="dim" style="left:64px;top:720px;width:264px"></div>
+  <div class="dim dim--v" style="left:354px;top:744px;height:298px"></div>
+  <div class="lbl" style="left:64px;top:1068px" data-qa="label">
+    <span class="tag tag--ink">Ручка</span>
+    <span class="num num--m"><b data-spec="handle_w_cm"></b><span class="x">×</span><b data-spec="handle_h_cm"></b><span class="u">&nbsp;см</span></span>
+  </div>
+
+  <!-- 3 ankle strap l × w: the strap is shown folded/closed, so only the webbing width is drawn;
+       the length is given in the label (a 41 cm line over the folded strap would be false) -->
+  <div class="dim dim--v" style="left:518px;top:748px;height:98px"></div>
+  <div class="lbl" style="left:542px;top:886px" data-qa="label">
+    <span class="tag tag--ink">Манжета</span>
+    <span class="num num--m"><b data-spec="ankle_l_cm"></b><span class="x">×</span><b data-spec="ankle_w_cm"></b><span class="u">&nbsp;см</span></span>
+  </div>
+
+  <!-- 4 door anchor length -->
+  <div class="dim" style="left:542px;top:1098px;width:474px"></div>
+  <div class="lbl" style="left:542px;top:1289px" data-qa="label">
+    <span class="tag tag--ink">Дверной якорь</span>
+    <span class="num num--m"><b data-spec="anchor_l_cm"></b><span class="u">&nbsp;см</span></span>
+  </div>
+
+  <!-- 5 bag (not in photo 08): text + small inset -->
+  <div class="lbl" style="left:226px;top:1289px" data-qa="label">
+    <span class="tag tag--ink">Сумка</span>
+    <span class="num num--m"><b data-spec="bag_w_cm"></b><span class="x">×</span><b data-spec="bag_h_cm"></b><span class="u">&nbsp;см</span></span>
+  </div>
+
+  <script src="../lib/bind.js"></script>
+</body>
+</html>

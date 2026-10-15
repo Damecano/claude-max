@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>06 · Детали</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* macro: handle top right, band runs out of the left edge.
+     canvas = (−186 + .8·sx, −21 + .8·sy) → foam right end (src 1502) at x 1016, top (src 491) at y 372 */
+  .photo { --s: 0.8; --x: -186px; --y: -21px; --fade-r: 24px; --fade-b: 1px; }  /* right edge (x 1043) melts in */
+  /* title leading (set-wide, same block as 04/05/07): the Д descender of line 1 would cut into
+     line 2 at the system leading (.86) — line 2 drops 14 px (baseline ≈324); scale, top and voice unchanged */
+  .title span + span { margin-top: 14px; }
+
+  /* callout: pin on the exact spot → 2 px leader → the module's own hairline («———— 0N») */
+  /* pin = ink core + paper ring + ink ring: reads the same on foam, chrome and white */
+  .pin { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+         background: var(--ink); box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink);
+         transform: skewX(var(--slant)); }
+  .ld  { position: absolute; height: 2px; background: var(--ink); }
+  .ld--v { width: 2px; height: auto; }
+  .call { position: absolute; left: 640px; width: 376px; }
+  .call .fact { font-weight: 800; }
+  .call .meta { display: block; margin-top: 8px; }
+  .nw { white-space: nowrap; }
+
+  /* 02: inset — ankle strap with its D-ring, crop of photo 08 in a hard-edged frame */
+  .call--inset { left: var(--m); width: 320px; }
+  .inset { position: relative; margin-top: 22px; width: 320px; height: 276px;
+           border: 2px solid var(--ink); overflow: hidden; background: var(--paper); }
+  .inset img { position: absolute; width: calc(1536px * 1.15); left: calc(-1218px * 1.15 - 2px); top: calc(-1229px * 1.15 - 2px);
+               mix-blend-mode: multiply; filter: url(#clean); }
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="clean" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0" result="luma"/>
+      <feComponentTransfer in="luma" result="mask"><feFuncA type="linear" slope="14.3" intercept="-12.3"/></feComponentTransfer>
+      <feComposite in="mask" in2="SourceGraphic" operator="over"/>
+    </filter>
+  </svg>
+  <img class="photo photo--fade" src="../src/06_detali.jpg" alt="">
+
+  <header class="chrome">
+    <span class="sec"><i class="tick"></i><span class="no">06</span><span>Детали</span></span>
+    <span class="idx">06<i>/08</i></span>
+  </header>
+
+  <h1 class="title"><span>Продуманные</span><span>детали</span></h1>
+
+  <!-- 01 foam grip: pin on the foam (src 1002/577); leader up to the module rule.
+       «Мягкая ручка» baseline = title line-2 baseline (≈324) -->
+  <i class="ld ld--v" style="left:615px;top:274px;height:166px"></i>
+  <i class="ld" style="left:615px;top:274px;width:27px"></i>
+  <i class="pin" style="left:616px;top:440px"></i>
+  <div class="call mod" style="top:274px" data-qa="label">
+    <span class="mod-n">01</span>
+    <div class="fact">Мягкая ручка</div>
+    <span class="meta">вспененный материал</span>
+  </div>
+
+  <!-- 02 ankle strap (not in photo 06): inset from photo 08 — numbered in reading order (y 274 → 400 → 969 → 1146) -->
+  <div class="call call--inset mod" style="top:400px" data-qa="label">
+    <span class="mod-n">02</span>
+    <div class="fact">Манжета<br><span class="nw">с D-кольцом</span></div>
+    <span class="meta">крепится на лодыжку</span>
+    <div class="inset"><img src="../src/08_razmery.jpg" alt=""></div>
+  </div>
+
+  <!-- 03 carabiner: pin on the gate bar (src 835/1238) -->
+  <i class="pin" style="left:482px;top:970px"></i>
+  <i class="ld" style="left:482px;top:969px;width:160px"></i>
+  <div class="call mod" style="top:969px" data-qa="label">
+    <span class="mod-n">03</span>
+    <div class="fact">Металлический<br>карабин</div>
+    <span class="meta">быстро меняете эспандер</span>
+  </div>
+
+  <!-- 04 reinforced end cap: pin on the ribbed half of the cap (src 650/1460) -->
+  <i class="pin" style="left:334px;top:1147px"></i>
+  <i class="ld" style="left:334px;top:1146px;width:308px"></i>
+  <div class="call mod" style="top:1146px" data-qa="label">
+    <span class="mod-n">04</span>
+    <div class="fact">Усиленное<br>соединение</div>
+    <span class="meta">колпачок на стыке</span>
+  </div>
+
+  <script src="../lib/bind.js"></script>
+</body>
+</html>

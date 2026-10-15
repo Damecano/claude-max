@@ -6,21 +6,37 @@
 <link rel="stylesheet" href="../fonts/fonts.css">
 <link rel="stylesheet" href="base.css">
 <style>
-  /* bar centred on the page; band centres src x 307/535/765/991/1220 → 225/376/528/677/828 */
-  .photo { --s: 0.66; --x: calc(540px - 784px * 0.66); --y: calc(366px - 515px * 0.66); --fade-r: 11px; --fade-b: 70px; }
+  /* set-wide rules kept local (base.css is frozen): title line 2 drops 14 px (as on 06);
+     units ≥ 34 px on inline values and set off from the numeral */
+  .title span + span { margin-top: 14px; }
+  .num .u { font-size: 0.5em; }
+  .num--m .u { font-size: 0.6em; margin-left: 0.12em; }
+  .num .d { margin-right: 0.28em; }            /* «до» prefix spacing, shared with 01 */
 
-  /* key module, top right: speed-rule on the title cap-line (147),
-     number baseline on the title baseline (≈312) */
-  .key { position: absolute; right: var(--m); top: 147px; width: 326px; }
-  .key > .speed { --speed-w: 84px; margin-bottom: 14px; }
-  .key .fact { font-size: 34px; font-weight: 800; line-height: 1; }
+  /* bar + end caps centred on the page: canvas 56…1025, ≈ 8 px past each margin;
+     band centres src x 307/535/765/991/1220 → 236/387/539/688/839 (label columns sit within 3 px:
+     234/384/542/690/841, spread a touch so «средняя | тяжёлая» keep ≥ 10 px to the divider) */
+  .photo { --s: 0.66; --x: calc(551px - 784px * 0.66); --y: calc(366px - 515px * 0.66); --fade-r: 11px; --fade-b: 70px; }
+
+  /* key module, top right (x 680 = the set's key column): speed-rule on the title cap-line (147),
+     label cap-top 179 (as on 08), number baseline on the title baseline (324) */
+  .key { position: absolute; right: var(--m); top: 147px; width: 336px; }
+  .key > .speed { --speed-w: 84px; margin-bottom: 12px; }
+  .key .fact { font-size: 34px; font-weight: 800; line-height: 1.2; }
   .key .num { display: block; margin-top: 2px; }
 
-  /* labels under each band (photo order) */
-  .lvls { position: absolute; top: 1170px; left: 0; width: 1080px; height: 130px; }
-  .lv { position: absolute; top: 0; width: 142px; margin-left: -71px; text-align: center; }
-  .lv .num { display: block; }
+  /* labels under each band (photo order), one column per band:
+     band-colour swatch (anchor) → value → level word; slanted hairline dividers at the
+     column midpoints. Pitch is only 151 px, so the value is 48 px with a 34 px unit
+     (a 56 px value + 34 px unit would be 146 px wide and touch the dividers). */
+  .lvls { position: absolute; top: 1166px; left: 0; width: 1080px; height: 140px; }
+  .lv { position: absolute; top: 0; width: 140px; margin-left: -70px; text-align: center; }
+  .lv .sw { display: block; margin: 0 auto 12px; width: 44px; height: 10px; }
+  .lv .num { display: block; font-size: 48px; }
+  .lv .num .u { font-size: 34px; margin-left: 0.04em; }
   .lv .fact { font-size: 34px; margin-top: 10px; line-height: 1.02; letter-spacing: -0.02em; }
+  /* dividers placed for max clearance along their lean (≥ 10 px to the text ink) */
+  .lvls .vdiv { position: absolute; top: 10px; height: 132px; background: var(--hair-2); }
 
   /* legend strip: true order легче → тяжелее */
   .legend { position: absolute; left: var(--m); right: var(--m); bottom: var(--m);
@@ -59,11 +75,12 @@
   </div>
 
   <div class="lvls">
-    <div class="lv" style="left:225px" data-qa="label"><span class="num num--m"><b data-spec="res_yellow_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">очень<br>лёгкая</div></div>
-    <div class="lv" style="left:376px" data-qa="label"><span class="num num--m"><b data-spec="res_red_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">средняя</div></div>
-    <div class="lv" style="left:528px" data-qa="label"><span class="num num--m"><b data-spec="res_blue_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">тяжёлая</div></div>
-    <div class="lv" style="left:677px" data-qa="label"><span class="num num--m"><b data-spec="res_green_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">лёгкая</div></div>
-    <div class="lv" style="left:828px" data-qa="label"><span class="num num--m"><b data-spec="res_black_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">очень<br>тяжёлая</div></div>
+    <i class="vdiv" style="left:306px"></i><i class="vdiv" style="left:460px"></i><i class="vdiv" style="left:622px"></i><i class="vdiv" style="left:756px"></i>
+    <div class="lv" style="left:234px" data-qa="label"><i class="sw y"></i><span class="num num--m"><b data-spec="res_yellow_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">очень<br>лёгкая</div></div>
+    <div class="lv" style="left:384px" data-qa="label"><i class="sw r"></i><span class="num num--m"><b data-spec="res_red_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">средняя</div></div>
+    <div class="lv" style="left:542px" data-qa="label"><i class="sw bl"></i><span class="num num--m"><b data-spec="res_blue_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">тяжёлая</div></div>
+    <div class="lv" style="left:690px" data-qa="label"><i class="sw g"></i><span class="num num--m"><b data-spec="res_green_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">лёгкая</div></div>
+    <div class="lv" style="left:841px" data-qa="label"><i class="sw k"></i><span class="num num--m"><b data-spec="res_black_kg"></b><span class="u">&nbsp;кг</span></span><div class="fact">очень<br>тяжёлая</div></div>
   </div>
 
   <div class="legend">

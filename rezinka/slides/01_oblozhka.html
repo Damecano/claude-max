@@ -16,27 +16,42 @@
             mask-image: radial-gradient(175px 64px at 880px 1169px, transparent 0, transparent 55%, #000 100%);
   }
 
+  /* set-wide rules kept local (base.css is frozen): units at half the numeral;
+     «до» prefix spacing shared with 03 (keeps «до 56,7 кг» inside the 1016 margin) */
+  .num .u { font-size: 0.5em; }
+  .num .d { margin-right: 0.28em; }
+
   /* staggered headline: line 1 flush left, line 2 flush right, led in by a speed-rule */
   .hero { top: 128px; width: var(--cw); }
   .hero .l2 { text-align: right; }
   .lead { position: absolute; left: var(--m); top: 296px; width: 138px; --speed-w: 64px; }
-  /* eyebrow: cap-top of line 1, flush right */
-  .eyebrow { position: absolute; right: var(--m); top: 131px; text-align: right;
-             color: var(--ink); font-weight: 700; font-size: 25px; line-height: 1.3; }
+  /* product type: cap-top of line 1, flush right; fact size (≥ 34) so it reads at shelf size */
+  .eyebrow { position: absolute; right: var(--m); top: 131px; text-align: right; margin: 0;
+             font: 800 34px/1.1 var(--f-text); letter-spacing: -0.015em; color: var(--ink); }
 
   /* spec stack: bottom-right, in the white beside the handles, under the carabiners */
-  .stack { position: absolute; left: 684px; right: var(--m); bottom: var(--m); }
+  .stack { position: absolute; left: 680px; right: var(--m); bottom: var(--m); }   /* x 680 = the set's key column */
   .stack .mod + .mod { margin-top: 14px; }
   .stack .mod + .mod.tot { margin-top: 26px; }
   .stack .num--xl { display: block; }
   .lv { display: flex; align-items: flex-end; gap: 16px; }
   .sws { display: flex; gap: 8px; margin-top: 14px; }
-  .sws .sw { width: 54px; height: 12px; }
+  .sws .sw { flex: 1; height: 12px; }          /* fill the module width, flush with the rules */
   .tot .fact { margin-bottom: 12px; }
 </style>
 </head>
 <body>
-  <img class="photo" src="../src/01_oblozhka.jpg" alt="">
+  <!-- #clean for this photo uses a gentler ramp (luma .95→.985 instead of .86→.93): the paper
+       (251–254) still goes to pure white, so the photo rectangle leaves no seam, but the soft
+       floor-shadow tail under the handles (luma 236–250) keeps its original fade -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="clean" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0" result="luma"/>
+      <feComponentTransfer in="luma" result="mask"><feFuncA type="linear" slope="28.57" intercept="-27.14"/></feComponentTransfer>
+      <feComposite in="mask" in2="SourceGraphic" operator="over"/>
+    </filter>
+  </svg>
+  <img class="photo photo--clean" src="../src/01_oblozhka.jpg" alt="">
 
   <header class="chrome">
     <span class="sec"><i class="tick"></i><span class="no">01</span><span>Набор</span></span>
@@ -45,7 +60,7 @@
 
   <h1 class="hero"><span class="l1">Спортзал</span><span class="l2">у вас дома</span></h1>
   <div class="lead speed" aria-hidden="true"></div>
-  <div class="eyebrow meta">Набор<br>эспандеров</div>
+  <p class="eyebrow">Набор<br>эспандеров</p>
 
   <div class="stack">
     <div class="mod mod--key" data-qa="label">
@@ -59,8 +74,8 @@
     </div>
     <div class="mod tot" data-qa="label">
       <span class="mod-n">03</span>
-      <div class="fact">Общая нагрузка до</div>
-      <span class="num num--l"><b data-spec="res_total_kg"></b><span class="u">&nbsp;кг</span></span>
+      <div class="fact">Общая нагрузка</div>
+      <span class="num num--l"><span class="d">до</span><b data-spec="res_total_kg"></b><span class="u">&nbsp;кг</span></span>
     </div>
   </div>
 

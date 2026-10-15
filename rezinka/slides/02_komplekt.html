@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>02 · Комплект</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* flat-lay: item bbox src x38–1494 → canvas 64…1016 (s = 952/1456), ring tops (src y559) at 370.
+     canvas = (39.1 + 0.654·sx, 4.4 + 0.654·sy) */
+  .photo { --s: 0.654; --x: 39.1px; --y: 4.4px; }
+  /* the printed box (src x63–595, y1410–1890) is not part of the kit: masked out with a soft
+     edge (element px = src · s), together with its cast shadow; bag rope starts at src x642 */
+  .photo {
+    -webkit-mask-image: linear-gradient(to right, transparent 397px, #000 414px),
+                        linear-gradient(to bottom, #000 898px, transparent 914px);
+    -webkit-mask-composite: source-over;
+            mask-image: linear-gradient(to right, transparent 397px, #000 414px),
+                        linear-gradient(to bottom, #000 898px, transparent 914px);
+            mask-composite: add;
+  }
+
+  /* set-wide rule kept local (base.css is frozen): title line 2 drops 14 px (as on 06).
+     No key number here: the numbered kit list carries the count, and «11 в 1» stays on the cover. */
+  .title span + span { margin-top: 14px; }
+
+  /* markers sit on the items; a paper ring separates them from black webbing */
+  .marker { box-shadow: 0 0 0 4px var(--paper); }
+  .marker--plus { background: var(--paper); color: var(--ink); box-shadow: inset 0 0 0 3px var(--ink), 0 0 0 4px var(--paper); }
+
+  /* legend: bottom-left, in the white the photo leaves under the handles */
+  .legend { position: absolute; left: var(--m); top: 930px; width: 360px; border-top: 2px solid var(--hair); }
+  .legend ol { list-style: none; margin: 0; padding: 28px 0 0; }
+  .row { display: flex; align-items: flex-start; gap: 18px; padding: 16px 0; border-top: 2px solid var(--hair-2); }
+  .legend li:first-child { border-top: 0; }
+  .legend li:last-child { padding-bottom: 0; }
+  .k { flex: none; width: 74px; margin-left: 5px;  /* skewed: bottom-left corner on the 64 grid */
+       height: 44px; display: grid; place-items: center;
+       background: var(--ink); color: var(--paper); transform: skewX(var(--slant));
+       font: italic 900 30px/1 var(--f-display); letter-spacing: -0.04em; }
+  .k > span { transform: skewX(calc(-1 * var(--slant))); }
+  .k--plus { background: var(--paper); color: var(--ink); box-shadow: inset 0 0 0 3px var(--ink); }
+  .row .fact { padding-top: 3px; white-space: nowrap; }
+
+  /* the guide sheet is a bonus, not a numbered item: same baseline as «11», under bag + sheet */
+  .extra { position: absolute; left: 460px; right: var(--m); top: 1307px; padding-bottom: 0; }
+  .extra .fact { font-size: 34px; }
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="clean" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0" result="luma"/>
+      <feComponentTransfer in="luma" result="mask"><feFuncA type="linear" slope="14.3" intercept="-12.3"/></feComponentTransfer>
+      <feComposite in="mask" in2="SourceGraphic" operator="over"/>
+    </filter>
+  </svg>
+  <img class="photo photo--clean" src="../src/02_komplekt.jpg" alt="">
+
+  <header class="chrome">
+    <span class="sec"><i class="tick"></i><span class="no">02</span><span>Комплект</span></span>
+    <span class="idx">02<i>/08</i></span>
+  </header>
+
+  <h1 class="title"><span>Что входит</span><span>в набор</span></h1>
+
+  <!-- markers on the items, reading order (centres: ring holes, handle triangles, webbing, bag) -->
+  <div class="marker" style="left:157px;top:469px"><span>1</span></div>
+  <div class="marker" style="left:347px;top:469px"><span>2</span></div>
+  <div class="marker" style="left:537px;top:469px"><span>3</span></div>
+  <div class="marker" style="left:729px;top:470px"><span>4</span></div>
+  <div class="marker" style="left:920px;top:472px"><span>5</span></div>
+  <div class="marker" style="left:167px;top:778px"><span>6</span></div>
+  <div class="marker" style="left:373px;top:778px"><span>7</span></div>
+  <div class="marker" style="left:628px;top:748px"><span>8</span></div>
+  <div class="marker" style="left:628px;top:847px"><span>9</span></div>
+  <div class="marker" style="left:906px;top:856px"><span>10</span></div>
+  <div class="marker" style="left:609px;top:1084px"><span>11</span></div>
+  <div class="marker marker--plus" style="left:889px;top:1200px"><span>+</span></div>
+
+  <div class="legend">
+    <ol>
+      <li class="row" data-qa="label"><span class="k"><span>1–5</span></span><span class="fact">Эспандеры</span></li>
+      <li class="row" data-qa="label"><span class="k"><span>6–7</span></span><span class="fact">Ручки</span></li>
+      <li class="row" data-qa="label"><span class="k"><span>8–9</span></span><span class="fact">Манжеты<br>на&nbsp;лодыжки</span></li>
+      <li class="row" data-qa="label"><span class="k"><span>10</span></span><span class="fact">Дверной якорь</span></li>
+      <li class="row" data-qa="label"><span class="k"><span>11</span></span><span class="fact">Сумка</span></li>
+    </ol>
+  </div>
+  <div class="row extra" data-qa="label" data-fit><span class="k k--plus"><span>+</span></span><span class="fact">инструкция с&nbsp;упражнениями</span></div>
+
+  <script src="../lib/bind.js"></script>
+</body>
+</html>

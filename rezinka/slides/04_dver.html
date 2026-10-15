@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>04 · Дверной якорь</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* full scene in a hard-edged frame on the 64 px grid.
+     src crop x 50…1492, y 360…1466 (door casing → neck) at s .66.
+     even rhythm: title baseline (324) → frame top 366 = 42 px = frame bottom (1096) → steps rule (1138) */
+  .shot { left: var(--m); top: 366px; width: var(--cw); height: 730px; }
+  .shot img { width: calc(1536px * 0.66); left: calc(-50px * 0.66); top: calc(-360px * 0.66); }
+
+  /* white notch cut out of the plain wall, top right (≥ 50 px clear of the door casing): the anchor itself,
+     cut-out from 02 (src x 1230…1420, y 1030…1405), melted into white */
+  .notch { position: absolute; left: 776px; top: 366px; width: 240px; height: 360px; background: var(--paper); }
+  .anchor { --s: 0.84; --x: calc(827px - 1244px * 0.84); --y: calc(400px - 1050px * 0.84);
+            clip-path: inset(861px 93.2px 535.9px 1021px); }
+  /* leader: notch → the same anchor on top of the door (src x 598…631, y 456…505 → canvas 426…448 × 429…462) */
+  .leader { position: absolute; left: 450px; top: 444px; width: 393px; height: 2px; background: var(--ink); }   /* tick touches the webbing (448), right end butts the cylinder (844) */
+  .leader::before { content: ""; position: absolute; left: -2px; top: -5px; width: 8px; height: 12px;
+                    background: var(--ink); transform: skewX(var(--slant)); }
+
+  /* title leading (set-wide): the Д descenders of line 1 would touch the caps of line 2 at the
+     system leading (.86) — line 2 drops 14 px (baseline ≈324); scale, top and voice unchanged */
+  .title span + span { margin-top: 14px; }
+
+  /* key statement, top right — same slot as the key module on 03;
+     speed-rule on the title cap-line (147), last baseline on the title baseline (≈324) */
+  .key { position: absolute; right: var(--m); top: 147px; width: 336px; }   /* x 680 = column 3 */
+  .key > .speed { --speed-w: 84px; margin-bottom: 40px; }
+  .key .fact { font-size: var(--t-key, 40px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+
+  /* three steps, columns on white */
+  .steps { position: absolute; left: var(--m); right: var(--m); bottom: var(--m);
+           display: grid; grid-template-columns: 270px 270px 1fr; column-gap: 38px; }
+  .step .num { display: block; margin: 2px 0 18px; }
+  .step .fact { font-size: 34px; line-height: 1.08; padding-bottom: 4px; }
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="clean" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0" result="luma"/>
+      <feComponentTransfer in="luma" result="mask"><feFuncA type="linear" slope="14.3" intercept="-12.3"/></feComponentTransfer>
+      <feComposite in="mask" in2="SourceGraphic" operator="over"/>
+    </filter>
+  </svg>
+
+  <div class="frame shot"><img src="../src/04_dver.jpg" alt=""></div>
+  <div class="notch"></div>
+  <img class="photo photo--clean anchor" src="../src/02_komplekt.jpg" alt="">
+  <i class="leader" aria-hidden="true"></i>
+
+  <header class="chrome">
+    <span class="sec"><i class="tick"></i><span class="no">04</span><span>Дверной якорь</span></span>
+    <span class="idx">04<i>/08</i></span>
+  </header>
+
+  <h1 class="title"><span>Дверной</span><span>якорь</span></h1>
+
+  <div class="key mod mod--key" data-qa="label">
+    <div class="speed"></div>
+    <div class="fact">Любая дверь<br>превращается<br>в&nbsp;тренажёр</div>
+  </div>
+
+  <div class="steps">
+    <div class="step mod" data-qa="label">
+      <span class="num num--l">1</span>
+      <div class="fact" data-fit>Вложите якорь<br>между дверью<br>и&nbsp;косяком</div></div>
+    <div class="step mod" data-qa="label">
+      <span class="num num--l">2</span>
+      <div class="fact" data-fit>Плотно<br>закройте дверь</div></div>
+    <div class="step mod" data-qa="label">
+      <span class="num num--l">3</span>
+      <div class="fact" data-fit>Проденьте эспандер<br>и&nbsp;пристегните ручки</div></div>
+  </div>
+
+  <script src="../lib/bind.js"></script>
+</body>
+</html>

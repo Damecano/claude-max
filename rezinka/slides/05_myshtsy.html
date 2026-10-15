@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>05 · Все группы мышц</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* full scene, bleeds left / right / bottom (the near-white wall would leave a
+     faint seam on an inset frame). s .7031 = photo width; src y 486…2033.
+     canvas = 352 + (src_y − 486) · .7031 → head top 417, feet 1379 */
+  .shot { left: 0; top: 352px; width: 1080px; height: 1088px;
+          /* only the top edge is on the page: the plain wall (246 vs 255) would read as a
+             faint seam, so it melts into white over 48 px — head starts 65 px down */
+          -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 48px);
+                  mask-image: linear-gradient(to bottom, transparent 0, #000 48px); }
+  .shot img { width: 1080px; left: 0; top: calc(-486px * 0.703125); }
+
+  /* title leading (set-wide): line 2 drops 14 px (baseline ≈324) — same block as 04/06 */
+  .title span + span { margin-top: 14px; }
+
+  /* key module, top right: speed-rule on the title cap-line (147), three balanced lines,
+     last baseline on the title baseline (≈324). «ВСЕ ГРУППЫ» runs to x 709, so the module cannot
+     start on column 3 (x 680, as 03/04/08): it is narrowed to 266 px (x 750, 41 px clear of the title)
+     and set at 34 px, the tight-column fact size — «с упражнениями» is 267 px wide at 34 px */
+  .key { position: absolute; right: var(--m); top: 147px; width: 266px; }
+  .key > .speed { --speed-w: 84px; margin-bottom: 61px; }
+  .key .fact { font-size: 34px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; white-space: nowrap; }
+
+  /* chips: two stacks in the empty wall between the margin and the bands,
+     bottom on the 64 px margin (bands ≥ 68 px away at every row) */
+  .chips { position: absolute; bottom: var(--m); display: flex; flex-direction: column; gap: 14px; }
+  .chips--l { left: var(--m); align-items: flex-start; }
+  .chips--r { right: var(--m); align-items: flex-end; }
+</style>
+</head>
+<body>
+  <div class="frame shot"><img src="../src/05_myshtsy.jpg" alt=""></div>
+
+  <header class="chrome">
+    <span class="sec"><i class="tick"></i><span class="no">05</span><span>Тренировки</span></span>
+    <span class="idx">05<i>/08</i></span>
+  </header>
+
+  <h1 class="title"><span>Все группы</span><span>мышц</span></h1>
+
+  <div class="key mod mod--key" data-qa="label">
+    <div class="speed"></div>
+    <div class="fact">Инструкция<br>с&nbsp;упражнениями<br>в&nbsp;комплекте</div>
+  </div>
+
+  <div class="chips chips--l">
+    <span class="chip" data-qa="label">Руки</span>
+    <span class="chip" data-qa="label">Плечи</span>
+    <span class="chip" data-qa="label">Спина</span>
+  </div>
+  <div class="chips chips--r">
+    <span class="chip" data-qa="label">Грудь</span>
+    <span class="chip" data-qa="label">Ноги</span>
+    <span class="chip" data-qa="label">Ягодицы</span>
+  </div>
+
+  <script src="../lib/bind.js"></script>
+</body>
+</html>
