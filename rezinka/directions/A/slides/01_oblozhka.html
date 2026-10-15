@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>01 · Обложка</title>
+<link rel="stylesheet" href="../../../fonts/fonts.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  /* product: full ring, ring top ≈ y 475 (air under the headline) */
+  .photo { --s: 0.60; --x: -37px; --y: 243px; }
+
+  /* spec stack in the empty corner under the carabiners (x 720 → right margin) */
+  .stack { position: absolute; left: 720px; top: 956px; width: 296px; }
+  .stack .n11 { font-size: var(--t-num-xl); display: block; }
+  .stack .hr { margin: 30px 0 26px; }
+  .lv-row { display: flex; align-items: flex-end; gap: 16px; }
+  .lv-row .n5 { font-size: var(--t-num-l); }
+  .lv-row .fact { font-size: 34px; line-height: 1; text-box: trim-both cap alphabetic; }
+  .lv-row .fact span { display: block; margin-top: 8px; }
+  .stack .chips { margin: 22px 0 0 0; }
+  .stack .chip { width: 48px; height: 22px; }
+  .total { margin-top: 34px; }
+  .total .meta { display: block; text-box: trim-both cap alphabetic; margin-bottom: 16px; }
+  .total .bar { font-size: 48px; font-weight: 700; height: 76px; padding: 0 30px 0 18px; }
+</style>
+</head>
+<body>
+  <img class="photo" src="../../../src/01_oblozhka.jpg" alt="">
+
+  <header class="chrome">
+    <span class="idx">01<i>/08</i></span>
+    <span class="tag">Набор эспандеров</span>
+    <span class="rule"></span>
+  </header>
+
+  <h1 class="hero"><span>Спортзал</span><span>у вас дома</span></h1>
+
+  <div class="stack">
+    <span class="num n11" data-qa="label"><b data-spec="items_total"></b> в 1</span>
+    <div class="hr"></div>
+    <div class="lv-row" data-qa="label">
+      <span class="num n5">5</span>
+      <span class="fact">уровней<span>нагрузки</span></span>
+    </div>
+    <div class="chips"><i class="chip lv1"></i><i class="chip lv2"></i><i class="chip lv3"></i><i class="chip lv4"></i><i class="chip lv5"></i></div>
+    <div class="total" data-qa="label">
+      <span class="meta">Общая нагрузка</span>
+      <span class="bar"><span>до&nbsp;<b data-spec="res_total_kg"></b>&nbsp;кг</span></span>
+    </div>
+  </div>
+
+  <script src="../../../lib/bind.js"></script>
+</body>
+</html>

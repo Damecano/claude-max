@@ -1,0 +1,251 @@
+/* ==========================================================================
+   ATHLETIX Mono — direction A · design system for the 8 Uzum slides
+   White paper, black ink. The five band colours are the ONLY colour and only
+   ever mean a load level. One motif: the speed cut (a fixed -15° slant) used
+   on label bars, level chips and the index tag. Everything else is upright.
+
+   Fonts: Oswald 500–700 (display, numerals, facts) · JetBrains Mono (meta).
+   Canvas 1080 × 1440 · margins 64 · chrome row at y 56 · title cap-top at y 136.
+   ========================================================================== */
+
+:root {
+  /* canvas + grid */
+  --W: 1080px;
+  --H: 1440px;
+  --m: 64px;                 /* side + bottom margin (brief: ≥ 56) */
+  --chrome-y: 56px;          /* top of the meta row (index · tag · product line) */
+  --title-y: 136px;          /* cap-top of every slide title / cover headline */
+  --col: calc(var(--W) - 2 * var(--m));   /* 952 content width */
+
+  /* ink */
+  --paper: #fff;
+  --ink: #000;
+  --ink-2: #2b2b2b;          /* secondary text, 14.4:1 on white (AAA) */
+  --hair: #000;              /* rules are black, never grey */
+  --rule: 3px;               /* heavy rule */
+  --rule-thin: 2px;
+  --void: #e9e9e9;           /* empty meter ticks only (never text) */
+
+  /* data palette — load levels, light → heavy (supplier order) */
+  --lv-1: #ffd200;           /* жёлтый  · очень лёгкая */
+  --lv-2: #00a06a;           /* зелёный · лёгкая */
+  --lv-3: #ee1b24;           /* красный · средняя */
+  --lv-4: #0a6bdb;           /* синий   · тяжёлая */
+  --lv-5: #111;              /* чёрный  · очень тяжёлая */
+
+  /* the one motif */
+  --slant: -15deg;
+
+  /* type families */
+  --f-display: 'Oswald', 'Inter Tight', sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* type scale (px) — headline : meta ≥ 4 : 1 */
+  --t-hero: 144px;           /* cover headline */
+  --t-title: 100px;          /* slide titles 02–08 (one line fits 952 px up to ~18 caps) */
+  --t-num-xl: 136px;         /* hero numerals («11 в 1») */
+  --t-num-l: 96px;           /* key numerals (totals) */
+  --t-num-m: 64px;           /* per-item numerals (kg under bands, cm) */
+  --t-lead: 44px;            /* key line in a bar */
+  --t-fact: 36px;            /* any fact text (brief: ≥ 34) */
+  --t-meta: 24px;            /* mono micro-meta (brief: ≥ 22) */
+}
+
+/* ---------- canvas ---------- */
+html, body { margin: 0; width: 1080px; height: 1440px; overflow: hidden; background: var(--paper); }
+* { box-sizing: border-box; }
+body {
+  position: relative;
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  font-variant-numeric: lining-nums;
+}
+.abs { position: absolute; }
+
+/* ---------- photo layer ----------
+   White-background photos melt into the page with multiply.
+   Position with --x/--y (top-left of the image in canvas px) and --s (scale of
+   the 1536 × 2048 source). */
+.photo {
+  position: absolute;
+  left: var(--x, 0px);
+  top: var(--y, 0px);
+  width: calc(1536px * var(--s, 0.703125));
+  height: auto;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+}
+/* For photos with a grey wall gradient (03): near-white pixels (L > ~0.88)
+   fade to transparent, so no photo edge can show. Product pixels are darker
+   than the threshold and stay untouched. Needs the inline <svg> filter #knock
+   (see slides/03_nagruzka.html — copy the <svg class="defs"> block). */
+.photo--knock { filter: url(#knock); }
+svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---------- chrome: index tag · section tag · speed rule · product line ---------- */
+.chrome {
+  position: absolute;
+  top: var(--chrome-y);
+  left: var(--m);
+  right: var(--m);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: var(--f-mono);
+  font-size: var(--t-meta);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+.chrome .idx {                         /* «01/08» in a black slanted tag */
+  position: relative;
+  color: var(--paper);
+  padding: 0 14px 0 12px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  isolation: isolate;
+}
+.chrome .idx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: skewX(var(--slant));
+  transform-origin: 0 100%;
+  z-index: -1;
+}
+.chrome .idx i { font-style: normal; font-weight: 500; opacity: 1; }
+.chrome .tag { font-weight: 700; }
+.chrome .rule { flex: 1; height: var(--rule-thin); background: var(--hair); }
+.chrome .line { font-weight: 500; }
+
+/* ---------- titles ----------
+   Cap-top sits exactly on --title-y (text-box trim), so every slide title
+   starts at the same height regardless of size. */
+.title, .hero {
+  position: absolute;
+  top: var(--title-y);
+  left: var(--m);
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.012em;
+  line-height: 0.9;
+  text-box: trim-both cap alphabetic;
+  white-space: nowrap;
+}
+.title { font-size: var(--t-title); }
+.hero  { font-size: var(--t-hero); line-height: 0.92; }
+.title span, .hero span { display: block; }
+
+/* ---------- numerals ---------- */
+.num {
+  font-family: var(--f-display);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-box: trim-both cap alphabetic;
+  white-space: nowrap;
+}
+.num .u {                               /* unit after a numeral: «кг», «см» */
+  font-weight: 500;
+  font-size: 0.42em;
+  letter-spacing: 0.01em;
+  margin-left: 0.12em;
+}
+.num--xl { font-size: var(--t-num-xl); }
+.num--l  { font-size: var(--t-num-l); }
+.num--m  { font-size: var(--t-num-m); }
+
+/* ---------- facts + meta ---------- */
+.fact {
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-size: var(--t-fact);
+  line-height: 1.08;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.meta {
+  font-family: var(--f-mono);
+  font-size: var(--t-meta);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- label bar: solid black, white text, speed-cut right edge ---------- */
+.bar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 1.7em;
+  padding: 0 0.62em 0 0.42em;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: var(--t-fact);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  isolation: isolate;
+}
+.bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: skewX(var(--slant));
+  transform-origin: 0 100%;           /* left-bottom fixed → slant leans right */
+  z-index: -1;
+}
+.bar--lead { font-size: var(--t-lead); }
+
+/* ---------- level chips + meters (the data palette) ---------- */
+.chips { display: flex; gap: 8px; }
+.chip {
+  width: 44px;
+  height: 28px;
+  background: var(--c, var(--ink));
+  transform: skewX(var(--slant));
+  transform-origin: 0 100%;
+}
+.lv1 { --c: var(--lv-1); }
+.lv2 { --c: var(--lv-2); }
+.lv3 { --c: var(--lv-3); }
+.lv4 { --c: var(--lv-4); }
+.lv5 { --c: var(--lv-5); }
+
+/* 5-tick meter: first --n ticks take the level colour */
+.meter { display: flex; gap: 5px; }
+.meter b {
+  display: block;
+  width: 20px;
+  height: 14px;
+  background: var(--void);
+  transform: skewX(var(--slant));
+  transform-origin: 0 100%;
+}
+.meter[data-n="1"] b:nth-child(-n+1),
+.meter[data-n="2"] b:nth-child(-n+2),
+.meter[data-n="3"] b:nth-child(-n+3),
+.meter[data-n="4"] b:nth-child(-n+4),
+.meter[data-n="5"] b:nth-child(-n+5) { background: var(--c); }
+
+/* ---------- rules ---------- */
+.hr { height: var(--rule); background: var(--hair); }
+.hr--thin { height: var(--rule-thin); }
+
+/* unfilled spec placeholder (bind.js) — loud on purpose */
+.ph { background: #ff0; color: #000; }

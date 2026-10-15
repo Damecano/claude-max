@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>03 · Нагрузка</title>
+<link rel="stylesheet" href="../../../fonts/fonts.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  /* rail centred, end caps inside the margins; bands at x ≈ 233 / 383 / 533 / 681 / 831 */
+  .photo { --s: 0.655; --x: 32px; --y: -75px; }
+
+  .lvl { position: absolute; top: 1086px; width: 140px; margin-left: -70px; text-align: center;
+         display: flex; flex-direction: column; align-items: center; }
+  .lvl .num { font-size: 58px; }
+  .lvl .num .u { font-size: 34px; margin-left: 5px; }
+  .lvl .meter { margin: 20px 0 20px; }
+  .lvl .fact { font-size: 34px; line-height: 1.04; }
+  /* column rules between bands */
+  .cr { position: absolute; top: 1086px; height: 170px; width: 2px; background: var(--hair); }
+
+  .key { position: absolute; left: var(--m); right: var(--m); bottom: var(--m); height: 84px;
+         display: flex; align-items: center; }
+  .key .bar { font-size: 46px; font-weight: 600; height: 84px; padding-left: 26px; padding-right: 40px; }
+</style>
+</head>
+<body>
+  <svg class="defs" aria-hidden="true">
+    <filter id="knock" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <!-- alpha = 1 for luminance ≤ 0.88, 0 for ≥ 0.93 (wall), colours untouched -->
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -4.252 -14.304 -1.444 0 18.6"/>
+    </filter>
+  </svg>
+
+  <img class="photo photo--knock" src="../../../src/03_nagruzka.jpg" alt="">
+
+  <header class="chrome">
+    <span class="idx">03<i>/08</i></span>
+    <span class="tag">Нагрузка</span>
+    <span class="rule"></span>
+    <span class="line">Набор эспандеров</span>
+  </header>
+
+  <h1 class="title">5 уровней нагрузки</h1>
+
+  <!-- photo order: yellow, red, blue, green, black -->
+  <div class="lvl lv1" style="left:233px" data-qa="label">
+    <span class="num"><b data-spec="res_yellow_kg"></b><span class="u">кг</span></span>
+    <div class="meter" data-n="1"><b></b><b></b><b></b><b></b><b></b></div>
+    <span class="fact">очень<br>лёгкая</span>
+  </div>
+  <div class="lvl lv3" style="left:383px" data-qa="label">
+    <span class="num"><b data-spec="res_red_kg"></b><span class="u">кг</span></span>
+    <div class="meter" data-n="3"><b></b><b></b><b></b><b></b><b></b></div>
+    <span class="fact">средняя</span>
+  </div>
+  <div class="lvl lv4" style="left:533px" data-qa="label">
+    <span class="num"><b data-spec="res_blue_kg"></b><span class="u">кг</span></span>
+    <div class="meter" data-n="4"><b></b><b></b><b></b><b></b><b></b></div>
+    <span class="fact">тяжёлая</span>
+  </div>
+  <div class="lvl lv2" style="left:681px" data-qa="label">
+    <span class="num"><b data-spec="res_green_kg"></b><span class="u">кг</span></span>
+    <div class="meter" data-n="2"><b></b><b></b><b></b><b></b><b></b></div>
+    <span class="fact">лёгкая</span>
+  </div>
+  <div class="lvl lv5" style="left:831px" data-qa="label">
+    <span class="num"><b data-spec="res_black_kg"></b><span class="u">кг</span></span>
+    <div class="meter" data-n="5"><b></b><b></b><b></b><b></b><b></b></div>
+    <span class="fact">очень<br>тяжёлая</span>
+  </div>
+
+  <i class="cr" style="left:307px"></i><i class="cr" style="left:457px"></i><i class="cr" style="left:606px"></i><i class="cr" style="left:755px"></i>
+
+  <div class="key">
+    <span class="bar" data-qa="label"><span>Соединяйте вместе —&nbsp;до&nbsp;<b data-spec="res_total_kg"></b>&nbsp;кг</span></span>
+  </div>
+
+  <script src="../../../lib/bind.js"></script>
+</body>
+</html>

@@ -35,11 +35,11 @@
   --f-text:    'Inter Tight', 'Inter', sans-serif;
   --f-mono:    'JetBrains Mono', monospace;
 
-  --t-cover: 112px;          /* cover headline (≥ 96) */
-  --t-title: 84px;           /* slide titles 02–08 (≥ 80) */
+  --t-cover: 104px;          /* cover headline (≥ 96) */
+  --t-title: 88px;           /* slide titles 02–08 (≥ 80); 88 : 22 = 4 : 1 */
   --t-fact:  36px;           /* any fact line (≥ 34) */
   --t-label: 34px;           /* callout labels, smallest fact size */
-  --t-meta:  24px;           /* mono micro-meta (≥ 22) */
+  --t-meta:  22px;           /* mono micro-meta (≥ 22) */
   --track-display: -0.035em;
 
   /* motion ---------------------------------------------------------------- */
@@ -68,7 +68,7 @@ body {
   font: 600 var(--t-meta)/1 var(--f-mono); letter-spacing: .04em; color: var(--ink);
 }
 .chrome__idx { display: inline-flex; align-items: center; white-space: nowrap; }
-.chrome__idx b { font-weight: 700; padding: 0 12px; margin-right: 6px; }
+.chrome__idx b { font-weight: 700; padding: 0 12px; margin-right: 12px; }
 .chrome__idx i { font-style: normal; color: var(--ink-2); }
 .chrome__rule { flex: 1; height: 2px; background: var(--hair); }
 .chrome__tag { white-space: nowrap; text-transform: uppercase; letter-spacing: .12em; }
@@ -101,22 +101,37 @@ body {
 
 /* ------------------------------------------------------------ volt plate
    The accent. A slanted lime block BEHIND black text. Use on one thing
-   per slide: the key number / key line.                               */
-.volt { position: relative; z-index: 0; display: inline-block; color: var(--ink); }
+   per slide: the key number / key line. The slant pivots on the bottom
+   edge, so the plate's bottom-left corner sits exactly on the grid line
+   the element is placed on.                                           */
+.volt {
+  position: relative; z-index: 0; display: inline-block; color: var(--ink);
+  padding: var(--volt-py, .1em) var(--volt-px, .2em) var(--volt-pb, .1em);
+}
 .volt::before {
-  content: ""; position: absolute; z-index: -1;
-  left: -.2em; right: -.2em; top: var(--volt-top, .02em); bottom: var(--volt-bot, -.04em);
-  background: var(--volt); transform: skewX(var(--skew));
+  content: ""; position: absolute; z-index: -1; inset: 0;
+  background: var(--volt); transform: skewX(var(--skew)); transform-origin: 0 100%;
 }
 /* index plate in the chrome */
 .chrome__idx b { position: relative; z-index: 0; }
 .chrome__idx b::before {
-  content: ""; position: absolute; z-index: -1; inset: -7px 0 -7px 0;
-  background: var(--volt); transform: skewX(var(--skew));
+  content: ""; position: absolute; z-index: -1; inset: -8px 0 -8px 0;
+  background: var(--volt); transform: skewX(var(--skew)); transform-origin: 0 100%;
 }
 
-/* ------------------------------------------------------ numbered module
-   Every fact block starts with a mono index and an ink rule.           */
+/* volt band: the cover's key-number plate. Bleeds off the left edge,
+   right end cut on the same slant; content starts on the margin.      */
+.volt-band { position: absolute; left: 0; z-index: 0; display: flex; align-items: center; gap: 30px; padding-left: var(--m); }
+.volt-band::before {
+  content: ""; position: absolute; z-index: -1; left: -60px; right: 0; top: 0; bottom: 0;
+  background: var(--volt); transform: skewX(var(--skew)); transform-origin: 0 100%;
+}
+
+/* ------------------------------------------------------ fact modules
+   .fact-blk — a fact under a 3 px ink rule (stack them in a column).
+   .mod__head — mono index + hairline for numbered lists (steps, legend). */
+.fact-blk { border-top: 3px solid var(--ink); padding-top: 20px; }
+.fact-blk + .fact-blk { margin-top: 38px; }
 .mod { position: absolute; }
 .mod__head {
   display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
@@ -128,14 +143,36 @@ body {
 /* ---------------------------------------------------------------- photos
    White-background shots melt into the page with multiply.            */
 .photo { position: absolute; display: block; mix-blend-mode: multiply; pointer-events: none; user-select: none; }
-.photo--scene { mix-blend-mode: normal; }     /* 04 / 05: hard-edged frames */
+/* soft edge: fades the photo's own border so a white-background shot placed
+   smaller than the canvas never shows a rectangle. Override --mx / --my
+   per photo (e.g. to drop a floor shadow).                             */
+.photo--soft {
+  --mx: linear-gradient(to right,  transparent 0, #000 3%, #000 97%, transparent 100%);
+  --my: linear-gradient(to bottom, transparent 0, #000 3%, #000 97%, transparent 100%);
+  -webkit-mask-image: var(--mx), var(--my); -webkit-mask-composite: source-in;
+  mask-image: var(--mx), var(--my); mask-composite: intersect;
+}
+.photo--scene { mix-blend-mode: normal; }     /* 04 / 05: full-bleed or hard-edged frames */
 .frame { position: absolute; overflow: hidden; }
+/* wall fade: white veil over EMPTY wall only (photo 03 grey gradient) */
+.veil { position: absolute; left: 0; right: 0; pointer-events: none; }
+.veil--top { top: 0;    background: linear-gradient(#fff 0, #fff 62%, rgba(255,255,255,0) 100%); }
+.veil--bot { bottom: 0; background: linear-gradient(rgba(255,255,255,0) 0, #fff 70px); }
 
 /* ------------------------------------------------------- band data marks
-   Square-ended colour bars — never slanted, so they can't be read as volt. */
-.swatch { display: block; height: 10px; background: var(--c); }
+   The five band colours are data. Their marks are square-ended and never
+   slanted, so they can't be read as volt.                              */
 [data-band="yellow"] { --c: var(--band-yellow); }
 [data-band="green"]  { --c: var(--band-green); }
 [data-band="red"]    { --c: var(--band-red); }
 [data-band="blue"]   { --c: var(--band-blue); }
 [data-band="black"]  { --c: var(--band-black); }
+.swatch { display: block; height: 10px; background: var(--c); }
+/* load meter: 5 cells, the first N filled in the band colour (N = level 1–5) */
+.meter { display: flex; gap: 4px; }
+.meter i { width: 22px; height: 10px; background: rgba(11, 11, 11, .12); }
+.meter[data-level="1"] i:nth-child(-n+1),
+.meter[data-level="2"] i:nth-child(-n+2),
+.meter[data-level="3"] i:nth-child(-n+3),
+.meter[data-level="4"] i:nth-child(-n+4),
+.meter[data-level="5"] i:nth-child(-n+5) { background: var(--c); }

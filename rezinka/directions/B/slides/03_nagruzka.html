@@ -15,16 +15,17 @@
   .fade-bot { position: absolute; left: 0; right: 0; top: 1198px; bottom: 0;
               background: linear-gradient(rgba(255,255,255,0) 0, #fff 70px); }
 
-  .key { position: absolute; right: var(--m); top: var(--title-top); width: 380px; text-align: left; }
-  .key .label { margin-bottom: 18px; }
-  .key .num { font-size: 58px; line-height: 1; }
-  .key .num .unit { font-family: var(--f-display); font-weight: 900; }
+  /* key line: label hangs from the title's first line, plate sits on its last baseline */
+  .key { position: absolute; left: 684px; top: var(--title-top); height: 172px;
+         display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; }
+  .key .label { margin-top: 12px; }
+  .key .num { font-size: 50px; line-height: .8; }
 
   .lv { position: absolute; top: 1222px; width: 150px; margin-left: -75px; text-align: center; }
   .lv .meter { display: flex; gap: 4px; justify-content: center; margin-bottom: 18px; }
   .lv .meter i { width: 22px; height: 10px; background: rgba(11,11,11,.12); }
   .lv .meter i.on { background: var(--c); }
-  .lv .kg { font: 800 46px/1 var(--f-text); letter-spacing: -.02em; white-space: nowrap; }
+  .lv .kg { font: 800 42px/1 var(--f-text); letter-spacing: -.02em; white-space: nowrap; }
   .lv .label { margin-top: 10px; }
 </style>
 </head>
@@ -43,7 +44,7 @@
   <h1 class="title"><span>5 уровней</span><span>нагрузки</span></h1>
 
   <div class="key">
-    <div class="label">Соединяйте вместе —</div>
+    <div class="label">Соединяйте<br>вместе&nbsp;—</div>
     <div class="num"><span class="volt">до&nbsp;<b data-spec="res_total_kg"></b>&nbsp;кг</span></div>
   </div>
 
