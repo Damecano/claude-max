@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../fonts/fonts.css">
+<title>S07 varianty</title>
+<style>html,body{margin:0;width:1536px;height:2048px;overflow:hidden;background:#ECECEA}</style></head><body>
+<svg id="scene" width="1536" height="2048" viewBox="0 0 1536 2048"></svg>
+<script src="lib/kit.js"></script>
+<script>
+// S07 — compact vs assembled, same scale, same baseline, eye-level camera.
+const W = 1536, H = 2048, BY = 1860, CW = 340, P = 0.08;
+const s = [Kit.defs(), Kit.studio()];
+
+// soft floor pool of light so the baseline reads as a surface, not a cut-out
+s.push(`<ellipse cx="768" cy="${BY + 10}" rx="760" ry="70" fill="#E4E4E1" filter="url(#blur-l)"/>`);
+
+// contact shadows: tight dark core + wide soft falloff to the right (key light upper-left)
+function contact(cx, by, w) {
+  return `<ellipse cx="${cx + w * 0.10}" cy="${by + 6}" rx="${w * 0.78}" ry="${w * 0.10}" fill="rgba(0,0,0,.13)" filter="url(#blur-l)"/>`
+       + Kit.shadow(cx + w * 0.04, by + 2, w, 0.95)
+       + `<ellipse cx="${cx}" cy="${by + 3}" rx="${w * 0.50}" ry="${w * 0.035}" fill="rgba(0,0,0,.35)" filter="url(#blur-s)"/>`;
+}
+
+const compact = Kit.shaker(470, BY, CW, { config: 'compact', cap: 'closed', face: 'logo', persp: P });
+const full    = Kit.shaker(1066, BY, CW, { config: 'full', cap: 'closed', face: 'logo', persp: P });
+s.push(contact(470, BY, CW), contact(1066, BY, CW), compact.svg, full.svg);
+
+document.getElementById('scene').innerHTML = s.join('');
+window.__layout = { compactTop: compact.top, fullTop: full.top, cupTopC: compact.cupTop, cupTopF: full.cupTop };
+</script></body></html>

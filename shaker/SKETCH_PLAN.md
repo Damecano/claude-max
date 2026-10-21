@@ -34,3 +34,30 @@ Kit: `sketches/lib/kit.js` (preview of every component: `sketches/lib/kit_previe
 | S06 | `S06_otseki` | «Отсеки для протеина, таблеток и перекуса» | **Storage open.** Compact cup with lid on, logo to camera, standing back-left (cx ≈ 420). In front, on a diagonal from centre to right-front: container with protein powder, pill organizer with capsules (3 sections), container with almonds. Camera elevated ~25° (persp ≈ 0.30). All three fills clearly readable. **Free:** upper-right x 900–1472, y 470–900. |
 | S07 | `S07_varianty` | «Сборный и разборный вариант» | **Two configurations side by side**, same scale, same baseline (by ≈ 1860), eye-level (persp ≈ 0.08): compact (left, cx ≈ 470) and assembled (right, cx ≈ 1066), both cap closed, logos to camera, w ≈ 340. **Free:** band between and below for labels; top zone as usual. |
 | S08 | `S08_zal` | «Всегда с собой — в зал и в дорогу» | **Lifestyle, bright gym.** Assembled shaker standing on a light wooden gym bench at right-centre (cx ≈ 1000), logo to camera; folded towel beside it, a dumbbell on the floor in front-left; soft daylight from large windows on the left; background wall light and plain (blurred in the final photo). Eye-level with the bench top. **Free:** left half x 64–620 from y 470 to 1300. |
+
+## Photo style for the final generations (client's approved previous work)
+
+`ref/style/matoli_*.jpg` are the client's own approved ChatGPT generations for another product (fabric
+hip bands), 1536 × 2048. Match their **photographic look** in every prompt — not their product, props or
+colours:
+
+- Photoreal, editorial lifestyle e-commerce photography; bright, airy, high-key.
+- Natural daylight, warm and soft (morning/late sun through windows, gentle sun streaks, soft shadows).
+- Light, calm materials: pale oak / light wood, white or warm-white walls, cream knit textiles, light
+  concrete, white sheets, a few green plants; shallow depth of field so backgrounds stay soft.
+- The product is sharp, clean, label perfectly readable, never small in frame.
+- For this product (unisex sports nutrition / gym): keep the same light warm look — bright minimal home,
+  sunny kitchen counter, light airy gym with daylight. Never a dark, gritty or neon gym.
+- Sets per scene (the sketch fixes placement; the prompt sets the real surface):
+  S01 cover and S03 exploded view — warm-white seamless studio with the same soft daylight feel (the cover
+  must sit cleanly on the client's white slide); S02 knolling — flat-lay on a pale oak tabletop in soft
+  sunlight (like `matoli_02_komplekt.jpg`); S04, S05, S06 — bright kitchen counter (light stone or oak),
+  window daylight; S07 — light oak shelf/counter against a warm-white wall; S08 — light airy gym with
+  daylight. Keep every background light enough for black text on top.
+
+## Package for ChatGPT (deliverable)
+
+Same format as the client's example zip: one ZIP with numbered 1536 × 2048 JPGs named `NN_name.jpg`,
+plus the identity sheet, the real reference photos and the prompts:
+`00_identity_sheet.jpg`, `01_oblozhka.jpg` … `08_zal.jpg` (the sketches), `ref/real_*.jpg`, `PROMPTS.txt`.
+In prompts, refer to attachments by these file names.
