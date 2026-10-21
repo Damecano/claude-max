@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../fonts/fonts.css">
+<style>html,body{margin:0;width:1536px;height:2048px;overflow:hidden}</style></head><body>
+<svg id="scene" width="1536" height="2048" viewBox="0 0 1536 2048"></svg>
+<script src="kit.js"></script>
+<script>
+const s = [];
+s.push(Kit.defs(), Kit.studio());
+const a = Kit.shaker(260, 1000, 260, { config:'full', cap:'closed', face:'logo' }); s.push(Kit.shadow(260,1000,260), a.svg);
+const b = Kit.shaker(620, 1000, 260, { config:'compact', cap:'open', face:'logo' }); s.push(Kit.shadow(620,1000,260), b.svg);
+const c = Kit.shaker(960, 1000, 260, { config:'compact', face:'scale' }); s.push(c.svg);
+const d = Kit.shaker(1300, 1000, 260, { config:'compact', face:'side' }); s.push(d.svg);
+s.push(Kit.container(260, 1500, 280, 150, 0.32, { contents: Kit.powderFill() }));
+s.push(Kit.container(620, 1500, 280, 130, 0.32, { dividers: 3, contents: Kit.capsules(10) }));
+s.push(Kit.container(960, 1500, 300, 200, 0.32, { contents: Kit.almonds(16) }));
+s.push(Kit.whisk(1300, 1400, 140, 0.45));
+s.push(Kit.whisk(300, 1800, 140, 1), Kit.lidTop(700, 1800, 260, 1), Kit.dumbbell(1150, 1820, 420, -8));
+document.getElementById('scene').innerHTML = s.join('');
+</script></body></html>
