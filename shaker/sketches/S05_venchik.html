@@ -51,8 +51,9 @@ function scoop(cx, by, w) {
   const h = w * 0.62 * VF, p = 0.58, rx = w / 2, yT = by - h;
   let g = '';
   // handle: flat bar lying on the floor, pointing back-right
-  g += `<path d="M${r2(cx + rx * 0.62)},${r2(yT + h * 0.45)} L${r2(cx + w * 0.98)},${r2(yT - w * 0.34)} L${r2(cx + w * 1.06)},${r2(yT - w * 0.28)} L${r2(cx + rx * 0.86)},${r2(yT + h * 0.80)} Z" fill="${K.propDk}"/>`;
-  g += `<ellipse cx="${r2(cx + w * 1.02)}" cy="${r2(yT - w * 0.31)}" rx="${r2(w * 0.05)}" ry="${r2(w * 0.04)}" fill="#7A7A77"/>`;
+  // handle: flat bar at rim height, sticking out to the back-right (drawn behind the bowl)
+  g += `<path d="M${r2(cx + rx * 0.70)},${r2(yT - 6)} L${r2(cx + w * 1.05)},${r2(yT - w * 0.30)} L${r2(cx + w * 1.11)},${r2(yT - w * 0.24)} L${r2(cx + rx * 0.92)},${r2(yT + w * 0.07)} Z" fill="${K.propDk}"/>`;
+  g += `<ellipse cx="${r2(cx + w * 1.08)}" cy="${r2(yT - w * 0.27)}" rx="${r2(w * 0.045)}" ry="${r2(w * 0.035)}" fill="#7A7A77"/>`;
   g += ell(cx + w * 0.30, by + rx * p * 0.6, rx * 1.05, rx * p * 0.5, 'rgba(0,0,0,.22)', 'filter="url(#blur-s)"');
   g += cyl(cx, yT, by, w, p * 0.95, p, K.prop, false);
   g += `<path d="${sideD(cx, yT, by, w, p * 0.95, p)}" fill="url(#gloss)" opacity=".5"/>`;
