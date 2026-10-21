@@ -1,0 +1,146 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../fonts/fonts.css">
+<title>S06 otseki</title>
+<style>html,body{margin:0;width:1536px;height:2048px;overflow:hidden;background:#ECECEA}</style></head><body>
+<svg id="scene" width="1536" height="2048" viewBox="0 0 1536 2048"></svg>
+<script src="lib/kit.js"></script>
+<script>
+(() => {
+// S06 — storage open. Compact cup (lid on, cap closed, logo to camera) back-left; three open storage parts on a
+// diagonal from centre to right-front. Camera elevated ~18–25° (ellipses 0.28 back → 0.38 front), verticals ×0.95.
+const r2 = n => Math.round(n * 100) / 100;
+const lerp = (a, b, t) => a + (b - a) * t;
+const sideD = (cx, yT, yB, w, pT, pB) => {
+  const rx = w / 2, x0 = cx - rx, x1 = cx + rx;
+  return `M${r2(x0)},${r2(yT)} L${r2(x0)},${r2(yB)} A${r2(rx)},${r2(rx * pB)} 0 0 0 ${r2(x1)},${r2(yB)} L${r2(x1)},${r2(yT)} A${r2(rx)},${r2(rx * pT)} 0 0 1 ${r2(x0)},${r2(yT)} Z`;
+};
+const cyl = (cx, yT, yB, w, pT, pB, fill, gloss = true) => {
+  const d = sideD(cx, yT, yB, w, pT, pB);
+  return `<path d="${d}" fill="${fill}"/>` + (gloss ? `<path d="${d}" fill="url(#gloss)"/>` : '');
+};
+const arcF = (cx, y, w, p, stroke, sw, op = 1) =>
+  `<path d="M${r2(cx - w / 2)},${r2(y)} A${r2(w / 2)},${r2(w / 2 * p)} 0 0 0 ${r2(cx + w / 2)},${r2(y)}" fill="none" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"/>`;
+const ell = (cx, cy, rx, ry, fill, extra = '') => `<ellipse cx="${r2(cx)}" cy="${r2(cy)}" rx="${r2(rx)}" ry="${r2(ry)}" fill="${fill}" ${extra}/>`;
+let clipN = 0;
+
+const VF = 0.95;
+const s = [Kit.defs()];
+s.push(`<defs>
+  <linearGradient id="floor6" x1="0" x2="0" y1="0" y2="1">
+    <stop offset="0" stop-color="#F3F3F1"/><stop offset=".5" stop-color="#ECECE9"/><stop offset="1" stop-color="#DEDEDA"/></linearGradient>
+  <linearGradient id="domeG" x1="0" x2="1" y1="0" y2="0">
+    <stop offset="0" stop-color="#2E2F34"/><stop offset=".3" stop-color="#3C3D42"/><stop offset=".55" stop-color="#1D1E21"/><stop offset="1" stop-color="#0E0E10"/></linearGradient>
+</defs>`);
+s.push(`<rect width="1536" height="2048" fill="url(#floor6)"/>`);
+
+// soft contact + cast shadow (key light upper-left → shadow to the right/back)
+function contact(cx, by, w, p) {
+  const rx = w / 2;
+  return ell(cx + rx * 0.45, by + rx * p * 0.1, rx * 1.35, rx * p * 1.25, 'rgba(0,0,0,.09)', 'filter="url(#blur-l)"')
+       + ell(cx + rx * 0.10, by + rx * p * 0.55, rx * 1.04, rx * p * 0.75, 'rgba(0,0,0,.20)', 'filter="url(#blur-s)"')
+       + ell(cx + rx * 0.02, by + rx * p * 0.85, rx * 0.92, rx * p * 0.32, 'rgba(0,0,0,.30)', 'filter="url(#blur-s)"');
+}
+
+// ---------- elevated lid: ring + low dome + closed flip cap (tab with finger-loop at the right) ----------
+function lidE(cx, ringB, w, p) {
+  const rw = w * 1.07, rh = w * 0.30 * VF, rrx = rw / 2, ringT = ringB - rh;
+  let g = cyl(cx, ringT, ringB, rw, p, p, K.lid);
+  g += arcF(cx, ringB - rh * 0.42, rw, p, K.rim, Math.max(2, w * 0.012));
+  g += ell(cx, ringT, rrx, rrx * p, '#222327');                                   // ring top ledge
+  const dbx = w * 0.455, ptx = w * 0.29, dTop = ringT - w * 0.13 * VF, pp = p * 0.96;
+  g += `<path d="M${r2(cx - dbx)},${r2(ringT)} C${r2(cx - dbx)},${r2(dTop + w * 0.05)} ${r2(cx - ptx - w * 0.06)},${r2(dTop)} ${r2(cx - ptx)},${r2(dTop)}
+         A${r2(ptx)},${r2(ptx * pp)} 0 0 1 ${r2(cx + ptx)},${r2(dTop)}
+         C${r2(cx + ptx + w * 0.06)},${r2(dTop)} ${r2(cx + dbx)},${r2(dTop + w * 0.05)} ${r2(cx + dbx)},${r2(ringT)}
+         A${r2(dbx)},${r2(dbx * p)} 0 0 1 ${r2(cx - dbx)},${r2(ringT)} Z" fill="url(#domeG)"/>`;
+  g += ell(cx, dTop, ptx, ptx * pp, '#2A2B30');                                     // plateau
+  // closed cap: low rounded tab lying across the plateau, small raised spout cover at left, loop at right
+  const tw = w * 0.60, tx = cx - w * 0.29, tdep = w * 0.20 * pp, th = w * 0.055 * VF, ty = dTop - tdep / 2 - th;
+  g += `<rect x="${r2(tx)}" y="${r2(ty + th)}" width="${r2(tw)}" height="${r2(tdep)}" rx="${r2(tdep / 2)}" fill="#09090B"/>`;
+  g += `<rect x="${r2(tx)}" y="${r2(ty)}" width="${r2(tw)}" height="${r2(tdep)}" rx="${r2(tdep / 2)}" fill="#17181B"/>`;
+  g += ell(tx + tw * 0.22, ty + tdep * 0.45, tw * 0.15, tdep * 0.36, '#232428');      // spout cover bump
+  g += ell(tx + tw - tdep * 0.75, ty + tdep / 2, tdep * 0.30, tdep * 0.22, '#3A3B40'); // finger-loop hole
+  g += `<path d="M${r2(cx - rrx + 4)},${r2(ringT + rrx * p * 0.2)} A${r2(rrx)},${r2(rrx * p)} 0 0 1 ${r2(cx - rrx * 0.45)},${r2(ringT - rrx * p * 0.88)}" fill="none" stroke="#55575D" stroke-width="4" stroke-linecap="round"/>`;
+  return { svg: g, top: ty };
+}
+
+// ---------- compact cup with lid, elevated ----------
+function compactE(cx, by, w, pT, pB) {
+  const cupH = w * 1.40 * VF, yT = by - cupH, rx = w / 2;
+  let g = cyl(cx, yT, by, w, pT, pB, K.body);
+  const fT = yT + rx * pT, fB = by + rx * pB;           // front generatrix
+  g += Kit.logo(cx, fT, w, fB - fT);
+  const l = lidE(cx, yT, w, pT);
+  g += l.svg;
+  return { svg: `<g>${g}</g>`, top: l.top, bottom: by + rx * pB };
+}
+
+// ---------- open storage part (tier / pill organizer) with contents, elevated ----------
+function openPart(cx, by, w, h, pT, pB, fillFn, { dividers = false } = {}) {
+  const yT = by - h, rx = w / 2, id = 'm6_' + (++clipN);
+  let g = cyl(cx, yT, by, w, pT, pB, K.body);
+  g += arcF(cx, yT + h * 0.16, w, pT, '#18191D', 3, 0.7);                  // thread band
+  g += ell(cx, yT, rx, rx * pT, K.rim);
+  const irx = rx * 0.90, iry = irx * pT, icy = yT + 2;
+  g += `<defs><clipPath id="${id}"><ellipse cx="${r2(cx)}" cy="${r2(icy)}" rx="${r2(irx)}" ry="${r2(iry)}"/></clipPath></defs>`;
+  g += ell(cx, icy, irx, iry, '#09090B');
+  g += `<g clip-path="url(#${id})">${fillFn(cx, icy, irx, iry, dividers)}</g>`;
+  g += `<path d="M${r2(cx - rx + 3)},${r2(yT + 4)} A${r2(rx)},${r2(rx * pT)} 0 0 1 ${r2(cx - rx * 0.4)},${r2(yT - rx * pT * 0.9)}" fill="none" stroke="#5C5E64" stroke-width="4" stroke-linecap="round"/>`;
+  return `<g>${g}</g>`;
+}
+// fills — heaped slightly above the rim so they read at a glance
+const powderHeap = (cx, cy, rx, ry) =>
+  ell(cx, cy + ry * 0.12, rx, ry, '#E9E9E5') +
+  `<path d="M${r2(cx - rx)},${r2(cy + ry * 0.1)} C${r2(cx - rx * 0.6)},${r2(cy - ry * 1.15)} ${r2(cx + rx * 0.55)},${r2(cy - ry * 1.25)} ${r2(cx + rx)},${r2(cy + ry * 0.1)} Z" fill="#F4F4F1"/>` +
+  ell(cx - rx * 0.22, cy - ry * 0.45, rx * 0.42, ry * 0.30, '#FBFBF9');
+const almondHeap = (cx, cy, rx, ry) => {
+  let g = ell(cx, cy, rx, ry, '#5E5E5B');
+  const R = Kit.rng(17);
+  for (let i = 0; i < 46; i++) {
+    const a = R() * Math.PI * 2, d = Math.sqrt(R()), x = cx + Math.cos(a) * rx * 0.92 * d, y = cy + Math.sin(a) * ry * 0.92 * d - ry * 0.25 * (1 - d);
+    g += Kit.almond(x, y, R() * 180, rx * 0.15);
+  }
+  return g;
+};
+const pillFill = (cx, cy, rx, ry) => {
+  // 3 sections (Y dividers): front = light capsules, back-left = dark softgels, back-right = round tablets
+  let g = ell(cx, cy, rx, ry, '#0C0C0E');
+  const R = Kit.rng(23);
+  const sector = (a0, a1, n, draw) => {
+    for (let i = 0; i < n; i++) {
+      const a = (a0 + (a1 - a0) * (0.12 + 0.76 * R())) * Math.PI / 180, d = 0.30 + 0.62 * Math.sqrt(R());
+      g += draw(cx + Math.cos(a) * rx * d, cy + Math.sin(a) * ry * d, R() * 180, i);
+    }
+  };
+  sector(30, 150, 9, (x, y, r, i) => Kit.capsule(x, y, r, rx * 0.17, true));                       // front
+  sector(150, 270, 10, (x, y, r) => `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(rx * 0.11)}" ry="${r2(rx * 0.075)}" transform="rotate(${r2(r)} ${r2(x)} ${r2(y)})" fill="#8C8C89" stroke="#6F6F6C" stroke-width="2"/>`); // back-left softgels
+  sector(270, 390, 11, (x, y) => `<ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(rx * 0.085)}" ry="${r2(rx * 0.085 * 0.6)}" fill="#D6D6D2" stroke="#A3A3A0" stroke-width="2"/>`); // back-right tablets
+  // Y divider walls (top edges), drawn over the contents
+  [-90, 30, 150].forEach(deg => {
+    const a = deg * Math.PI / 180;
+    g += `<path d="M${r2(cx)},${r2(cy)} L${r2(cx + Math.cos(a) * rx)},${r2(cy + Math.sin(a) * ry)}" stroke="#2E2F33" stroke-width="${r2(rx * 0.07)}" stroke-linecap="round"/>`;
+  });
+  return g;
+};
+
+// ---------- layout ----------
+const CUP = { cx: 430, by: 1400, w: 410, pT: 0.26, pB: 0.29 };
+const POW = { cx: 800, by: 1548, w: 418, pT: 0.31, pB: 0.34 };   // taller storage tier, protein powder
+const PIL = { cx: 1062, by: 1716, w: 336, pT: 0.34, pB: 0.37 };  // pill organizer (smaller dia), 3 sections
+const ALM = { cx: 1236, by: 1874, w: 436, pT: 0.37, pB: 0.40 };  // short storage tier, almonds
+
+s.push(contact(CUP.cx, CUP.by, CUP.w, CUP.pB));
+const cup = compactE(CUP.cx, CUP.by, CUP.w, CUP.pT, CUP.pB);
+s.push(cup.svg);
+
+s.push(contact(POW.cx, POW.by, POW.w, POW.pB));
+s.push(openPart(POW.cx, POW.by, POW.w, POW.w * 0.80 * VF, POW.pT, POW.pB, powderHeap));
+s.push(contact(PIL.cx, PIL.by, PIL.w, PIL.pB));
+s.push(openPart(PIL.cx, PIL.by, PIL.w, PIL.w * 0.46 * VF, PIL.pT, PIL.pB, pillFill));
+s.push(contact(ALM.cx, ALM.by, ALM.w, ALM.pB));
+s.push(openPart(ALM.cx, ALM.by, ALM.w, ALM.w * 0.40 * VF, ALM.pT, ALM.pB, almondHeap));
+
+// a few loose almonds / one capsule on the floor — tiny, keeps the still life natural
+s.push(Kit.almond(960, 1918, 20, 26), Kit.almond(1012, 1936, 140, 24), Kit.capsule(1290, 1700 + 0, 15, 22, true).replace('', ''));
+
+document.getElementById('scene').innerHTML = s.join('');
+})();
+</script></body></html>

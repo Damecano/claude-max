@@ -1,0 +1,128 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../fonts/fonts.css">
+<title>S05 venchik</title>
+<style>html,body{margin:0;width:1536px;height:2048px;overflow:hidden;background:#ECECEA}</style></head><body>
+<svg id="scene" width="1536" height="2048" viewBox="0 0 1536 2048"></svg>
+<script src="lib/kit.js"></script>
+<script>
+(() => {
+// S05 — whisk being dropped into the open compact cup. Elevated camera (~30°): ellipses open (0.50 rim → 0.56 base),
+// verticals foreshortened ×0.87. Key light upper-left. Local helpers only (kit.js is shared, not edited).
+const r2 = n => Math.round(n * 100) / 100;
+const sideD = (cx, yT, yB, w, pT, pB) => {
+  const rx = w / 2, x0 = cx - rx, x1 = cx + rx;
+  return `M${r2(x0)},${r2(yT)} L${r2(x0)},${r2(yB)} A${r2(rx)},${r2(rx * pB)} 0 0 0 ${r2(x1)},${r2(yB)} L${r2(x1)},${r2(yT)} A${r2(rx)},${r2(rx * pT)} 0 0 1 ${r2(x0)},${r2(yT)} Z`;
+};
+const cyl = (cx, yT, yB, w, pT, pB, fill, gloss = true) => {
+  const d = sideD(cx, yT, yB, w, pT, pB);
+  return `<path d="${d}" fill="${fill}"/>` + (gloss ? `<path d="${d}" fill="url(#gloss)"/>` : '');
+};
+const arcF = (cx, y, w, p, stroke, sw, op = 1) =>
+  `<path d="M${r2(cx - w / 2)},${r2(y)} A${r2(w / 2)},${r2(w / 2 * p)} 0 0 0 ${r2(cx + w / 2)},${r2(y)}" fill="none" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"/>`;
+const ell = (cx, cy, rx, ry, fill, extra = '') => `<ellipse cx="${r2(cx)}" cy="${r2(cy)}" rx="${r2(rx)}" ry="${r2(ry)}" fill="${fill}" ${extra}/>`;
+const lerp = (a, b, t) => a + (b - a) * t;
+
+// ---------- scene constants ----------
+const CX = 800, CW = 500, PT = 0.46, PB = 0.52, VF = 0.93;
+const BY = 1748;                       // centre line of the cup's base ellipse
+const CUPH = CW * 1.40 * VF;
+const YT = BY - CUPH;                  // centre line of the opening
+const RX = CW / 2;
+const LEVEL = 0.78;                    // milk level as fraction of cup height from the base (≈ 450 ml)
+
+const s = [Kit.defs()];
+s.push(`<defs>
+  <linearGradient id="floor5" x1="0" x2="0" y1="0" y2="1">
+    <stop offset="0" stop-color="#F2F2F0"/><stop offset=".55" stop-color="#EAEAE7"/><stop offset="1" stop-color="#DCDCD8"/></linearGradient>
+  <radialGradient id="inside" cx=".5" cy=".15" r=".9"><stop offset="0" stop-color="#2A2B2F"/><stop offset=".6" stop-color="#121215"/><stop offset="1" stop-color="#070708"/></radialGradient>
+  <radialGradient id="milk" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#DCDCD7"/><stop offset="1" stop-color="#B9B9B4"/></radialGradient>
+  <clipPath id="mouth"><ellipse cx="${CX}" cy="${r2(YT)}" rx="${r2(RX * 0.91)}" ry="${r2(RX * 0.91 * PT)}"/></clipPath>
+  <clipPath id="cupside"><path d="${sideD(CX, YT, BY, CW, PT, PB)}"/></clipPath>
+  <filter id="soft3" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>`);
+s.push(`<rect width="1536" height="2048" fill="url(#floor5)"/>`);
+
+// ---------- contact + cast shadows (light from upper-left → shadow falls right/back) ----------
+s.push(ell(CX + 150, BY + 40, RX * 1.25, RX * 0.42, 'rgba(0,0,0,.10)', 'filter="url(#blur-l)"'));
+s.push(ell(CX + 30, BY + RX * PB * 0.55, RX * 1.02, RX * PB * 0.62, 'rgba(0,0,0,.20)', 'filter="url(#blur-s)"'));
+s.push(ell(CX + 6, BY + RX * PB * 0.85, RX * 0.92, RX * PB * 0.30, 'rgba(0,0,0,.30)', 'filter="url(#blur-s)"'));
+
+// ---------- measuring scoop with protein powder, on the floor front-right (prop, grey) ----------
+function scoop(cx, by, w) {
+  const h = w * 0.62 * VF, p = 0.58, rx = w / 2, yT = by - h;
+  let g = '';
+  // handle: flat bar lying on the floor, pointing back-right
+  g += `<path d="M${r2(cx + rx * 0.62)},${r2(yT + h * 0.45)} L${r2(cx + w * 0.98)},${r2(yT - w * 0.34)} L${r2(cx + w * 1.06)},${r2(yT - w * 0.28)} L${r2(cx + rx * 0.86)},${r2(yT + h * 0.80)} Z" fill="${K.propDk}"/>`;
+  g += `<ellipse cx="${r2(cx + w * 1.02)}" cy="${r2(yT - w * 0.31)}" rx="${r2(w * 0.05)}" ry="${r2(w * 0.04)}" fill="#7A7A77"/>`;
+  g += ell(cx + w * 0.30, by + rx * p * 0.6, rx * 1.05, rx * p * 0.5, 'rgba(0,0,0,.22)', 'filter="url(#blur-s)"');
+  g += cyl(cx, yT, by, w, p * 0.95, p, K.prop, false);
+  g += `<path d="${sideD(cx, yT, by, w, p * 0.95, p)}" fill="url(#gloss)" opacity=".5"/>`;
+  g += ell(cx, yT, rx, rx * p * 0.95, K.propDk);
+  // heaped powder mound
+  g += `<path d="M${r2(cx - rx * 0.93)},${r2(yT + 2)} C${r2(cx - rx * 0.7)},${r2(yT - h * 0.55)} ${r2(cx + rx * 0.6)},${r2(yT - h * 0.62)} ${r2(cx + rx * 0.93)},${r2(yT + 2)}
+          A${r2(rx * 0.93)},${r2(rx * 0.93 * p * 0.95)} 0 0 1 ${r2(cx - rx * 0.93)},${r2(yT + 2)} Z" fill="#F4F4F1"/>`;
+  g += ell(cx - rx * 0.18, yT - h * 0.22, rx * 0.40, rx * 0.20, '#FBFBF9');
+  // a few spilled grains on the floor in front of the scoop
+  g += Kit.scatter(cx - w * 0.15, by + rx * p * 1.1, w * 0.42, w * 0.10, 22, 11, (x, y, r, i) => `<circle cx="${r2(x)}" cy="${r2(y)}" r="${r2(3 + (i % 4))}" fill="#F7F7F4"/>`);
+  g += ell(cx - w * 0.05, by + rx * p * 1.05, w * 0.22, w * 0.05, '#F3F3F0', 'opacity=".9"');
+  return `<g>${g}</g>`;
+}
+s.push(scoop(1222, 1858, 220));
+
+// ---------- the cup (compact, lid off, logo to camera) ----------
+let cup = '';
+cup += `<path d="${sideD(CX, YT, BY, CW, PT, PB)}" fill="${K.body}"/>`;
+cup += `<path d="${sideD(CX, YT, BY, CW, PT, PB)}" fill="url(#gloss)"/>`;
+// thread band just under the opening
+cup += arcF(CX, YT + 14, CW, PT, '#18191D', 4, 0.8) + arcF(CX, YT + 28, CW, PT, '#18191D', 3, 0.6);
+// logo — vertical, bottom→top, centred; foreshortened with the cup height
+// print lies along the front generatrix: from the front of the rim (YT+ry) to the front of the base (BY+ry)
+const fT = YT + RX * PT, fB = BY + RX * PB;
+cup += Kit.logo(CX, fT, CW, fB - fT);
+// opening: rim, dark interior, back inner wall
+cup += ell(CX, YT, RX, RX * PT, K.rim);
+cup += ell(CX, YT + 3, RX * 0.91, RX * 0.91 * PT, 'url(#inside)');
+// milk surface + floating powder seen through the mouth (clipped to the opening)
+const yS = BY - CUPH * LEVEL, pS = lerp(PB, PT, LEVEL), rS = RX * 0.91;
+cup += `<g clip-path="url(#mouth)">
+  ${ell(CX, yS, rS, rS * pS, 'url(#milk)')}
+  ${ell(CX - 50, yS - rS * pS * 0.62, 105, 20, '#FBFBF9', 'filter="url(#soft3)"')}
+  ${ell(CX + 80, yS - rS * pS * 0.70, 70, 13, '#FBFBF9', 'filter="url(#soft3)"')}
+  ${Kit.scatter(CX - 10, yS - rS * pS * 0.62, rS * 0.62, rS * pS * 0.18, 30, 5, (x, y, r, i) => `<ellipse cx="${r2(x + 2)}" cy="${r2(y + 3)}" rx="${r2(7 + (i % 5) * 3)}" ry="${r2(4 + (i % 3) * 2)}" fill="#A9A9A4" opacity=".6"/><ellipse cx="${r2(x)}" cy="${r2(y)}" rx="${r2(7 + (i % 5) * 3)}" ry="${r2(4 + (i % 3) * 2)}" fill="#FCFCFA"/>`)}
+  ${arcF(CX, YT + 3, RX * 0.91 * 2, PT, 'rgba(255,255,255,.10)', 3)}
+</g>`;
+// rim highlight on the left (key light)
+cup += `<path d="M${r2(CX - RX * 0.98)},${r2(YT + 6)} A${r2(RX)},${r2(RX * PT)} 0 0 1 ${r2(CX - RX * 0.35)},${r2(YT - RX * PT * 0.93)}" fill="none" stroke="#6A6C72" stroke-width="5" stroke-linecap="round"/>`;
+s.push(`<g>${cup}</g>`);
+
+// ---------- whisk hovering above the opening, tilted, cone of the steel spring hanging down ----------
+function whisk3d(cx, cy, r, p, rot, depth) {
+  const dy = depth * Math.sqrt(1 - p * p);
+  let g = '';
+  // soft shadow of the whisk falling into the cup mouth (down-right)
+  const N = 8;
+  for (let k = N - 1; k >= 0; k--) {
+    const t = k / (N - 1), rr = r * 0.86 * (1 - 0.86 * t);
+    g += `<ellipse cx="${r2(cx)}" cy="${r2(cy + dy * t)}" rx="${r2(rr)}" ry="${r2(rr * p)}" fill="none" stroke="url(#steel)" stroke-width="${r2(r * 0.035)}"/>`;
+  }
+  g += `<ellipse cx="${r2(cx)}" cy="${r2(cy + dy)}" rx="${r2(r * 0.07)}" ry="${r2(r * 0.07 * p)}" fill="#B9BCC0"/>`;
+  // ring with thickness (rim band) + top face
+  const t = r * 0.10;
+  g += `<ellipse cx="${r2(cx)}" cy="${r2(cy + t * 0.55)}" rx="${r2(r)}" ry="${r2(r * p)}" fill="none" stroke="#050506" stroke-width="${r2(t)}"/>`;
+  g += `<ellipse cx="${r2(cx)}" cy="${r2(cy)}" rx="${r2(r)}" ry="${r2(r * p)}" fill="none" stroke="${K.rim}" stroke-width="${r2(t)}"/>`;
+  g += `<path d="M${r2(cx - r - t * 0.3)},${r2(cy)} A${r2(r)},${r2(r * p)} 0 0 1 ${r2(cx - r * 0.2)},${r2(cy - r * p - t * 0.3)}" fill="none" stroke="#4A4C52" stroke-width="${r2(t * 0.35)}" stroke-linecap="round"/>`;
+  // 3 spokes in the ring plane
+  for (let i = 0; i < 3; i++) {
+    const a = (-90 + 25 + i * 120) * Math.PI / 180;
+    g += `<path d="M${r2(cx)},${r2(cy)} L${r2(cx + Math.cos(a) * r)},${r2(cy + Math.sin(a) * r * p)}" stroke="${K.rim}" stroke-width="${r2(r * 0.085)}" stroke-linecap="round"/>`;
+  }
+  g += `<ellipse cx="${r2(cx)}" cy="${r2(cy)}" rx="${r2(r * 0.12)}" ry="${r2(r * 0.12 * p)}" fill="${K.rim}"/>`;
+  return `<g transform="rotate(${rot} ${cx} ${cy})">${g}</g>`;
+}
+const WR = RX * 0.93, WY = 758;
+// faint shadow the whisk drops on the far rim / inside (light from upper-left)
+s.push(ell(CX + 40, YT - 20, WR * 0.85, WR * 0.85 * PT * 0.8, 'rgba(0,0,0,.16)', 'filter="url(#blur-s)"'));
+s.push(whisk3d(CX - 14, WY, WR, 0.60, -9, WR * 0.55));
+
+document.getElementById('scene').innerHTML = s.join('');
+})();
+</script></body></html>

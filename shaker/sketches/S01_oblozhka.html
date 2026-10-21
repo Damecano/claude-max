@@ -1,0 +1,87 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../fonts/fonts.css">
+<style>html,body{margin:0;width:1536px;height:2048px;overflow:hidden;background:#ECECEA}</style></head><body>
+<svg id="scene" width="1536" height="2048" viewBox="0 0 1536 2048"></svg>
+<script src="lib/kit.js"></script>
+<script>
+// S01 — cover. Assembled shaker, cap closed, logo to camera, low hero camera.
+// Low camera: eye level EYE (just below product mid-height). Circles above it bow UP, below it bow DOWN.
+const W = 1536, H = 2048;
+const R = n => Math.round(n * 100) / 100;
+const EYE = 1300, PMAX = 0.06, PSPAN = 580;
+const P = y => PMAX * (y - EYE) / PSPAN;               // signed persp (ry/rx) of a horizontal circle at height y
+
+// front arc from (xa,y) to (xb,y); p>0 bows down, p<0 bows up
+function arcTo(xa, xb, y, p) {
+  const rx = Math.abs(xb - xa) / 2, ry = Math.abs(rx * p);
+  if (ry < 0.4) return ` L${R(xb)},${R(y)}`;
+  const sweep = ((xb > xa) === (p > 0)) ? 0 : 1;
+  return ` A${R(rx)},${R(ry)} 0 0 ${sweep} ${R(xb)},${R(y)}`;
+}
+function band(cx, yT, yB, w) {
+  const xL = cx - w / 2, xR = cx + w / 2;
+  return `M${R(xL)},${R(yT)}${arcTo(xL, xR, yT, P(yT))} L${R(xR)},${R(yB)}${arcTo(xR, xL, yB, P(yB))} Z`;
+}
+const fillBand = (d, fill) => `<path d="${d}" fill="${fill}"/><path d="${d}" fill="url(#gloss)"/>`;
+const seamLine = (cx, y, w, sw, col = K.rim) =>
+  `<path d="M${R(cx - w / 2)},${R(y)}${arcTo(cx - w / 2, cx + w / 2, y, P(y))}" fill="none" stroke="${col}" stroke-width="${R(sw)}"/>`;
+
+// assembled shaker with per-height perspective; proportions identical to Kit.shaker
+function shakerLow(cx, by, w) {
+  const cupH = w * 1.40, t1 = w * 0.40, t2 = w * 0.80;
+  const yT2 = by - t2, yT1 = yT2 - t1, cupY = yT1 - cupH;
+  const sw = Math.max(2, w * 0.012);
+  let s = '';
+  s += fillBand(band(cx, yT2, by, w), K.body);                 // tall bottom tier
+  s += fillBand(band(cx, yT1, yT2, w), K.body);                // short tier
+  s += fillBand(band(cx, cupY - w * 0.08, yT1, w), K.body);    // cup (runs up under the lid ring, no gap)
+  // thin seams: dark line + faint lit lip just under it
+  [yT2, yT1].forEach(y => { s += seamLine(cx, y + sw * 1.2, w * 0.995, sw * 0.8, 'rgba(255,255,255,.10)'); s += seamLine(cx, y, w, sw); });
+  s += Kit.logo(cx, cupY, w, cupH);                            // ATHLETIX vertical, bottom→top
+  // soft shadow the overhanging lid ring throws on the cup (blurred, clipped to the cup)
+  s += `<clipPath id="cupClip"><path d="${band(cx, cupY - w * 0.08, yT1, w)}"/></clipPath>
+        <g clip-path="url(#cupClip)"><rect x="${R(cx - w * 0.6)}" y="${R(cupY - w * 0.1)}" width="${R(w * 1.2)}" height="${R(w * 0.16)}" fill="rgba(0,0,0,.55)" filter="url(#bl12)"/></g>`;
+  // lid: dome first (behind), then ring (its top arc bows up = seen from below)
+  const rw = w * 1.07, rh = w * 0.30, dw = w * 0.86, dh = w * 0.14;
+  const ringTop = cupY - rh, dTop = ringTop - dh;
+  s += `<path d="M${R(cx - rw / 2 + 4)},${R(ringTop + 6)} C${R(cx - rw / 2 + 4)},${R(dTop + dh * 0.2)} ${R(cx - dw / 2)},${R(dTop)} ${R(cx - dw * 0.32)},${R(dTop)}
+         L${R(cx + dw * 0.32)},${R(dTop)} C${R(cx + dw / 2)},${R(dTop)} ${R(cx + rw / 2 - 4)},${R(dTop + dh * 0.2)} ${R(cx + rw / 2 - 4)},${R(ringTop + 6)} Z" fill="${K.lid}"/>`;
+  s += `<path d="M${R(cx - rw / 2 + 4)},${R(ringTop + 6)} C${R(cx - rw / 2 + 4)},${R(dTop + dh * 0.2)} ${R(cx - dw / 2)},${R(dTop)} ${R(cx - dw * 0.32)},${R(dTop)}
+         L${R(cx + dw * 0.32)},${R(dTop)} C${R(cx + dw / 2)},${R(dTop)} ${R(cx + rw / 2 - 4)},${R(dTop + dh * 0.2)} ${R(cx + rw / 2 - 4)},${R(ringTop + 6)} Z" fill="url(#gloss)" opacity=".7"/>`;
+  s += fillBand(band(cx, ringTop, cupY, rw), K.lid);
+  s += seamLine(cx, cupY - rh * 0.42, rw, Math.max(2, w * 0.012));          // groove in the ring
+  s += seamLine(cx, cupY - 2, rw, 3, 'rgba(0,0,0,.8)');                       // ring lower edge
+  // closed flip cap: low tab lying across the dome, round finger-loop at the right end (same as kit)
+  const tx = cx - w * 0.30, tw = w * 0.62, th = w * 0.11, ty = dTop - th * 0.9;
+  s += `<rect x="${R(tx)}" y="${R(ty)}" width="${R(tw)}" height="${R(th)}" rx="${R(th / 2)}" fill="${K.rim}"/>`;
+  s += `<rect x="${R(tx)}" y="${R(ty)}" width="${R(tw)}" height="${R(th)}" rx="${R(th / 2)}" fill="url(#gloss)" opacity=".55"/>`;
+  s += `<circle cx="${R(tx + tw - th * 0.9)}" cy="${R(ty + th / 2)}" r="${R(th * 0.26)}" fill="#3A3B40"/>`;
+  return { svg: `<g>${s}</g>`, top: ty, cupY, yT1, yT2 };
+}
+
+const s = [];
+s.push(Kit.defs(), `<defs>
+  <linearGradient id="ringShade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+  <filter id="blur-c" filterUnits="userSpaceOnUse" x="0" y="0" width="1536" height="2048"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="bl12" filterUnits="userSpaceOnUse" x="0" y="0" width="1536" height="2048"><feGaussianBlur stdDeviation="12"/></filter>
+  <filter id="bl16" filterUnits="userSpaceOnUse" x="0" y="0" width="1536" height="2048"><feGaussianBlur stdDeviation="16"/></filter>
+  <filter id="blur-xl" filterUnits="userSpaceOnUse" x="0" y="0" width="1536" height="2048"><feGaussianBlur stdDeviation="26"/></filter>
+</defs>`);
+s.push(Kit.studio(W, H));
+
+// ---- hero product ----
+const CX = 600, BY = 1880, WC = 420;
+// floor shadows: long soft cast shadow to the right-back (key light upper-left), soft pool, tight contact line
+s.push(`<ellipse cx="${CX + 130}" cy="${BY - 8}" rx="250" ry="20" fill="rgba(0,0,0,.13)" filter="url(#blur-xl)"/>`);
+s.push(`<ellipse cx="${CX + 10}" cy="${BY}" rx="${WC * 0.62}" ry="${WC * 0.05}" fill="rgba(0,0,0,.22)" filter="url(#bl16)"/>`);
+s.push(`<ellipse cx="${CX}" cy="${BY + 2}" rx="${WC * 0.5}" ry="${WC * 0.022}" fill="rgba(0,0,0,.55)" filter="url(#blur-c)"/>`);
+const hero = shakerLow(CX, BY, WC);
+s.push(hero.svg);
+
+// ---- whisk disc standing on its rim, leaning against the bottom tier on the left ----
+const WR = WC * 0.46, wx = 318, wy = BY - WR * 0.985;
+s.push(`<ellipse cx="${wx + 40}" cy="${BY - 4}" rx="120" ry="12" fill="rgba(0,0,0,.20)" filter="url(#bl16)"/>`);
+s.push(`<ellipse cx="${wx - 40}" cy="${BY + 1}" rx="34" ry="6" fill="rgba(0,0,0,.5)" filter="url(#blur-c)"/>`);
+s.push(`<g transform="translate(${wx},${R(wy)}) rotate(-78)">${Kit.whisk(0, 0, WR, 0.6)}</g>`);
+
+document.getElementById('scene').innerHTML = s.join('');
+</script></body></html>
